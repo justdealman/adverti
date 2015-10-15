@@ -1,0 +1,6 @@
+<script>
+    window.onload = function () {
+        yaCounter<?php echo Mage::getStoreConfig('yandex/metric/code')?>.reachGoal("Spravka");
+        ga('send','event','Zakaz','Spravka','<?php echo $_REQUEST['back_url'] ?>');
+    };
+</script>

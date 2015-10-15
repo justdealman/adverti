@@ -1,0 +1,56 @@
+<?php /** @var Adverti_Calculate_Block_CalculationParams $this */ ?>
+<?php $oldCalculation=$this->getOldCalculation();?>
+<?php if($oldCalculation){?>
+    <script>
+        jQuery(document).ready(function(){
+           setTimeout(function(){ jQuery('.bx-wrapper-w').prepend('<div class="discount-flag">Скидка</div>')},1000);
+        });
+</script>
+<?php }?>
+<div id="calculation-params" class="select-help-group select-help-group_1-2-3-block" itemprop="offerDetails" itemscope itemtype="http://data-vocabulary.org/Offer">
+    <div class="select-help-group__select select-help-group__select_1-2-3-block select-help-group__select_print-pl-5">
+        <span class="select-help-group__select__label blue print-black">Цена за штуку</span>
+
+        <div class="result-product-sum blue title-sm title-mb-r nowrap print-black js-icon_loading-indicator">
+            <span class="js-total-price" itemprop="price">
+                <?php echo number_format($this->getTotalPrice(), 2, ',', ' '); ?>
+            </span>&nbsp;руб.
+            <meta itemprop="priceCurrency" content="RUB" />
+            <meta itemprop="seller" content="Adverti" />
+        </div>
+
+        <div class="select-help-group__select__notice wrapper-right vsmall-size lh-sm print-hide">
+            <?php echo number_format($this->getNextPrice(), 2, ',', ' '); ?>&nbsp;руб. при тираже
+            <a href="javascript:void(0);" class="dotted js-calculation-size" rel="<?php echo $this->getNextCount(); ?>">
+                <?php echo $this->getNextCount();?> шт.
+            </a>
+        </div>
+    </div>
+
+    <div class="select-help-group__help print-hide"></div>
+
+    <div class="select-help-group__select select-help-group__select_1-2-3-block print-hide w-50">
+        <label for="circulation" class="select-help-group__select__label blue">Тираж</label>
+
+        <div class="d-form-item d-form-item_mb-r">
+            <label>
+                <input class="d-form-item__text d-form-item__text_height d-form-item__text_blue-b blue"
+                       id="calculation" name="qty" type="text"
+                       value="<?php echo $this->getCount(); ?>">
+            </label>
+        </div>
+        <div class="select-help-group__select__notice wrapper-right vsmall-size lh-sm">
+            <div>
+                Минимум
+                <a href="javascript:void(0);" class="dotted js-calculation-size js-min-count-get-var" rel="<?php echo $this->getMinCount(); ?>">
+                    <?php echo $this->getMinCount() ?> шт.
+                </a>
+            </div>
+            <?php if($this->getMinCount()>$this->getCount() && !$this->getRecommendedRemember()): ?>
+            <div class="check-with-manager-in-product-page">
+                Уточняйте у менеджера возможность изготовления такого тиража
+            </div>
+            <?php endif?>
+        </div>
+    </div>
+</div>

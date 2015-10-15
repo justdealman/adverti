@@ -1,0 +1,12 @@
+<?php
+/** @var Mage_Core_Controller_Request_Http $request */
+$request = $this->getRequest();
+$params = $request->getParams();
+$page = trim($params['page'],'/');
+?>
+<script>
+    window.onload = function () {
+        yaCounter<?php echo Mage::getStoreConfig('yandex/metric/code')?>.reachGoal(<?php if($params['action']=='order'){ echo "'ZakazTovar'"; }else{ echo "'Spravka'"; } ?>);
+        ga('send','event','Zakaz',<?php if($params['action']=='order'){ echo "'ZakazTovar'"; }else{ echo "'Spravka'"; } ?>,'<?php echo $page ?>');
+    };
+</script>

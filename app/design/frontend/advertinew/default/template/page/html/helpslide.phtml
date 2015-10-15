@@ -1,0 +1,37 @@
+<?php
+    /** @var Adverti_Svisto_Block_Promobaner $this */
+?>
+<?php if($this->getSvistoCollection()->getData('title_helper_enable')==1) { ?>
+<aside class="user-helper">
+    <div class="user-helper__title"><?php echo $this->getSvistoCollection()->getData('title_helper')?></div>
+    <div class="user-helper__box">
+        <div class="user-helper__box__left">
+            <?php echo $this->getSvistoCollection()->getData('text_helper') ?>
+        </div>
+        <div class="user-helper__box__right">
+            <div class="nav-n nav-n_simple js-nav-n">
+                <ul class="nav-n__list">
+                    <li class="nav-n__list__item">
+                        <a class="nav-n__list__item__link nav-n__list__item__link_simple nav-n__list__item__link_arrow" href="<?php echo $this->getUrlCategory() ?>">
+                            Посмотреть все
+                        </a>
+
+                        <div class="nav-n__inner-first-wrapper nav-n__inner-first-wrapper_right-alignment nav-n__inner-first-wrapper_right-alignment_1-2-set-default-pos">
+                            <ul class="nav-n__inner-first">
+                                <?php foreach($this->getMenuCategory() as $_category) { ?>
+                                <li class="nav-n__inner-first__item">
+                                    <a class="nav-n__inner-first__item__link" href="<?php echo $_category->getUrl() ?>">
+                                        <?php echo $_category->getName() ?>
+                                    </a>
+                                </li>
+                              <?php } ?>
+                            </ul>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</aside>
+<?php } ?>

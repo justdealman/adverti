@@ -1,0 +1,28 @@
+<?php
+$_helper = $this->helper('catalog/output');
+$_category = $this->getCurrentCategory();
+$_imgHtml = '';
+if ($_imgUrl = $_category->getImageUrl()) {
+    $_imgHtml = '<p class="category-image"><img src="' . $_imgUrl . '" alt="' . $this->escapeHtml($_category->getName()) . '" title="' . $this->escapeHtml($_category->getName()) . '" /></p>';
+    $_imgHtml = $_helper->categoryAttribute($_category, $_imgHtml, 'image');
+}
+?>
+
+
+
+<?php if ($_description = $this->getCurrentCategory()->getDescription()): ?>
+       <?php $category_data = $this->getCurrentCategory()->getData(); ?>
+            <h1 class="title_mr-b title_mr-b_print-mr-r"><?php
+           if($category_data['navigation_label']){
+           echo($category_data['navigation_label']);
+           } else {
+               echo($category_data['name']);
+             }
+           ?></h1>
+<article>
+    <p class="paragraph-mb-b">
+       <?php echo $_helper->categoryAttribute($_category, $_description, 'description'); ?>
+    </p>
+
+<?php endif; ?>
+

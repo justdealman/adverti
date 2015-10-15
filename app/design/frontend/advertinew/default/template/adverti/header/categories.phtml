@@ -1,0 +1,46 @@
+<?php
+/** @var Adverti_Adverti_Block_Categories $this */
+?>
+<?php
+$tree = $this->getCategoriesTree();
+if (isset($tree[Mage::app()->getStore()->getRootCategoryId()])) :
+?>
+
+<div class="open-menu-w">
+    <h2>Каталог сувенирной продукции</h2>
+    <div class="open-menu">
+        <?php foreach ($tree[Mage::app()->getStore()->getRootCategoryId()]['children'] as $item):
+            /** @var Mage_Catalog_Model_Category $category */
+            $category = $item['category']?>
+                <div class="open-menu-item js-open-menu-item">
+                    <div class="open-menu-item__inner">
+                    <?php if ($category->getImageUrl()): ?>
+                          <div class="open-menu-item__image-w">
+                              <img class="open-menu-item__image" src="<?php echo $category->getImageUrl() ?>"
+                                   alt="<?php echo $this->escapeHtml($category->getName()) ?>"/>
+                          </div>
+                    <?php endif ?>
+                        <div class="open-menu-item__title"><a class="title-link" href="<?php $url_cat_main =  Mage::getBaseUrl().$category->getData('url_key').'/'; echo $url_cat_main; /*$category->getUrl() */?>"
+                   title="<?php echo $this->escapeHtml($category->getName());  ?>">
+
+                    <?php echo $this->escapeHtml($category->getName()) ?></a></div>
+                    <ul class="open-menu-item__list">
+                    <?php
+                          foreach ($item['children'] as $_item):
+                          $subCategory = $_item['category']
+                    ?>
+
+                <!-- подкатегории -->
+                        <li class="open-menu-item__list__item">
+                            <a class="open-menu-item__link bbottom-r" href="<?php   echo $subCategory->getUrl(); ?>">
+                                <span class="open-menu-item__link__text link-inner"><?php echo $this->escapeHtml($subCategory->getName()) ?></span>
+                            </a>
+                           </li>
+                        <?php endforeach ?>
+                    </ul>
+                </div>
+            </div>
+        <?php endforeach ?>
+    </div>
+</div>
+<?php endif ?>

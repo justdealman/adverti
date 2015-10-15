@@ -1,0 +1,72 @@
+<div class="topline">
+<div class="topline__inner container clearfix">
+    <?php /** @var Mage_Checkout_Helper_Cart $checkout */?>
+    <?php $checkout = $this->helper('checkout/cart'); ?>
+<div class="topline__right">
+    <div class="wrapper-right" id="ajax-cart">
+        <?php if ($_SERVER['REQUEST_URI']!='/checkout/cart/') { ?>
+            <?php if( $checkout->getItemsCount()>0) { ?>
+                <div class="basket_box_right">
+                <a href="<?php echo $this->getUrl('checkout/cart')?>" class="basket basket_full">
+                    <div class="basket__text">
+                        <div class="basket__text__full vsmall-size lh-sm">
+                            <?php  echo Mage::getSingleton('core/session')->getGrandPrice();?> руб.
+                            <br/>
+                            <span class="basket__pseudo-link">
+                               Оформить заказ
+                           </span>
+                        </div>
+                    </div>
+                </a>
+                </div>
+                <div class="basket__text basket_box_left clearfix">
+                    <?php echo $checkout->getItemsCount() ?>
+                </div>
+            <?php }else{?>
+               <div class="basket">
+                    <div class="basket__text">
+                        <div class="button-helper js-button-helper-with-scroll">
+                            <div class="basket__pseudo-link">
+                                <a href="javascript:void(0)" class="button-helper__button js-basket-helper__button button-helper__button_simple-link">
+                                    <b>Корзина пуста</b>
+                                </a>
+                            </div>
+                            <!--noindex-->
+                            <div class="button-helper__text basket-helper__text" <div class="button-helper__text basket-helper__text">
+                                    <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('hint')->toHtml();?>
+                            </div>
+                            <!--/noindex-->
+                        </div>
+                    </div>
+               </div>
+            <?php }?>
+        <?php }?>
+    </div>
+</div>
+
+<script>
+    jQuery(function() {
+        if (Mage.Cookies.get('basket_hint')==null) {
+            jQuery('.js-basket-helper__button').trigger('click');
+            Mage.Cookies.set('basket_hint', 'opened');
+        }
+    });
+</script>
+
+<div class="topline__left">
+
+<div class="nav-n nav-n_main js-nav-n">
+<ul class="nav-n__list">
+<li class="nav-n__list__item">
+<a class="nav-n__list__item__link"
+   href="javascript:void(0);">
+    <span class="nav-n__list__images__text">Каталог сувениров</span>
+</a>
+
+<?php echo $this->getChildHtml('adverti.topmenu') ?>
+<?php echo $this->getChildHtml('topmenuSearch') ?>
+
+</div>
+
+</div>
+</div>

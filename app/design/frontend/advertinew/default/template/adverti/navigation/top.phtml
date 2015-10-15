@@ -1,0 +1,57 @@
+<?php
+/** @var Adverti_Adverti_Block_Categories $this */
+?>
+<div class="nav-n__inner-first-wrapper">
+<ul class="nav-n__inner-first">
+ <?php
+    $tree = $this->getCategoriesTree();
+    if (isset($tree[Mage::app()->getStore()->getRootCategoryId()])) :?>
+    <?php endif ?>
+    <?php foreach ($tree[Mage::app()->getStore()->getRootCategoryId()]['children'] as $item):
+        /** @var Mage_Catalog_Model_Category $category */
+        $category = $item['category']?>
+     <li class="nav-n__inner-first__item">
+            <?php $url_to_main = Mage::getBaseUrl().$category->getUrlKey().'/'; ?>
+         <a class="nav-n__inner-first__item__link" href="<?php echo  $url_to_main; ?>"><?php echo $category->getName() ?></a>
+         <div class="nav-n__inner-last-wrapper">
+             <ul class="nav-n__inner-last">
+            <?php foreach ($item['children'] as $_item):
+            $subCategory = $_item['category']?>
+                 <li class="nav-n__inner-last__item"><a
+                         class="nav-n__inner-last__item__link"
+                         href = "<?php echo $subCategory->getUrl() ?>"><?php echo $subCategory->getName()?></a></li>
+                 <?php endforeach ?>
+             </ul>
+        </div>
+      </li>
+ <?php endforeach ?>
+
+<?php
+    //промо категории
+    $promoCategory = $this->getLayout()
+        ->createBlock('letspromocategories/menu')
+        ->setTemplate('letspromocategories/menu.phtml')
+        ->toHtml();
+    echo $promoCategory;
+?>
+
+</ul>
+</div>
+</li>
+
+</ul>
+</div>
+
+<?php if(Mage::getStoreConfig('newgoodsreceipt/show/menu') && Mage::getStoreConfig('newgoodsreceipt/show/active')) :?>
+    <script>
+        jQuery(document).ready(function(){
+            jQuery('.js-nav-n').find('ul ul li:first ul').prepend(
+                '<li class="nav-n__inner-last__item">' +
+                '<a class="nav-n__inner-last__item__link" href="<?php echo Mage::getBaseUrl().Mage::getModel('core/url_rewrite')->loadByIdPath('newgoodsreceipt')->getData('request_path');?>">'+
+                '<?php echo Mage::getStoreConfig('newgoodsreceipt/content/menu_title')?>'+
+                '</a>' +
+                '</li>'
+            );
+        });
+    </script>
+<?php endif;?>

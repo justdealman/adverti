@@ -1,0 +1,73 @@
+<?php
+//die('tset');
+/** @var Adverti_Adverti_Block_ChildCategoriesProducts $this */
+/** @var Mage_Catalog_Model_Category $category */
+?>
+
+<div class="pr-tabs js-pr-tabs">
+    <div class="pr-tabs__header">
+        <?php foreach ($this->getCategoriesCollection() as $category){
+            $productCollection = $this->getProductCollection($category);
+            if (!$productCollection->count()) {
+                continue;
+            }?>
+
+
+<!--            <a href="--><?php //echo $this->escapeHtml($category->getUrl())?><!--" class="hdr3"></a>-->
+            <a class="pr-tabs__header__link" href="<?php echo $this->escapeHtml($category->getUrl()) ?>"><?php echo $category->getName() ?></a>
+        <?php } ?>
+    </div>
+
+    <?php if ($this->getCategoriesCollection()->count()):?><div class="pr-tabs__content"><?php endif;?>
+        <?php foreach ($this->getCategoriesCollection() as $category){
+            $productCollection = $this->getProductCollection($category);
+            if (!$productCollection->count()) {
+                continue;
+            }?>
+
+            <div class="pr-tabs__content__item">
+
+                <a class="fake-link title-vsm bold block pr-tabs_show-all__hidden" href="<?php echo $this->escapeHtml($category->getUrl()) ?>"><?php echo $category->getName() ?></a>
+                <div class="cols-4">
+
+                    <?php foreach ($productCollection as $product){ ?>
+                        <?php
+                            Mage::helper('calculate')->isDiscounted($product);
+                        ?>
+                        <div class="cols-4__item">
+
+                            <?php if($product->getData('recommended_price_old')) {?><div class="discount-flag discount-flag-catalog">скидка</div><?php }?>
+
+                            <a href="<?php echo $product->getProductUrl() ?>" class="promo-product promo-product_adaptive-slider promo-product_full-w">
+                                <?php if($product->getData('recommended_price_old')) {?><div class="discount-flag">скидка</div><?php }?>
+                                <?php if($product->getData('archive')) {?><div class="archive-flag">Архивный товар</div><?php }?>
+                                <div class="promo-product__image-w">
+                                    <img class="promo-product__image" src="<?php
+                                    echo $this->helper('catalog/image')->init($product, 'small_image')->resize(210)->setQuality(100); ?>" alt="<?php
+                                    echo $this->stripTags($this->getImageLabel($product, 'small_image'), null, true) ?>"
+                                         alt=""/>
+                                </div>
+                                <div class="promo-product__title-w promo-product__title-w_hidden-1-col">
+                                    <div class="promo-product__title"><?php echo $this->escapeHtml($product->getName()) ?></div>
+                                </div>
+                                <div class="promo-product__price">
+                                    <div class="promo-product__price__price">
+                                        <?php if($product->getData('recommended_price_old')) {?>
+                                            <span class="catalog_oldprice"><?php echo number_format($product->getData('recommended_price_old'), 2, ',', ' ');?></span>
+                                        <?php }?>
+                                        <?php echo number_format($product->getData('recommended_price'), 2, ',', ' ');?><!--<span class="rouble">a</span>-->&nbsp;руб.
+                                    </div>
+                                </div>
+                                <div class="promo-product__additional">при тираже&nbsp;<?php echo number_format($product->getData('recommended_count'), 0, ',', ' ') ?>&nbsp;шт.</div>
+                                <div class="promo-product__sku"><?php echo $product->getSku() ?></div>
+                            </a>
+                        </div>
+                    <?php } ?>
+                </div>
+            </div>
+
+
+        <?php } ?>
+        <?php if ($this->getCategoriesCollection()->count()):?></div><?php endif;?>
+
+</div>

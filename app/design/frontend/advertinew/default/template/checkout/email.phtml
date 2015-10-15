@@ -1,0 +1,21 @@
+<?php /** @var Adverti_Calculate_Block_Checkout_Cart $this */ ?>
+<?php foreach ($this->getItems() as $item): ?>
+    <tr>
+        <td><?php echo $item['product']['name']; ?><br>Артикул: <?php echo $item['product']['sku']; ?></td>
+        <td>
+            <?php foreach ($item['product']['options'] as $option): ?>
+                <?php echo $option ?><br>
+            <?php endforeach; ?>
+        </td>
+        <td>
+            <?php foreach ($item['services']['names'] as $name): ?>
+                <?php echo $name; ?><br>
+            <?php endforeach; ?>
+        </td>
+        <td><?php echo number_format($item['product']['price'], 2, ',', ' '); ?>&nbsp;руб.</td>
+        <td><?php echo number_format($item['services']['price'], 2, ',', ' '); ?>&nbsp;руб.</td>
+        <td><?php echo number_format($item['total']['price'], 2, ',', ' '); ?>&nbsp;руб.</td>
+        <td><?php echo $item['count']; ?></td>
+        <td><?php echo number_format($item['total']['amount'], 2, ',', ' '); ?>&nbsp;руб.</td>
+    </tr>
+<?php endforeach; ?>

@@ -1,0 +1,34 @@
+
+<?php
+/** @var Mage_Checkout_Block_Cart $this */
+?>
+
+<?php /** @var Adverti_Calculate_Block_Cart_Calccart $calcblock */?>
+
+<section xmlns="http://www.w3.org/1999/html">
+<h1>Корзина</h1>
+
+<div class="b-table-w">
+    <?php echo $this->getChildHtml('calc_checkout') ?>
+</div>
+<?php echo($this->getChildHtml('slider'))?>
+
+    <hr class="hr hr_print-mt-sm hr_mt-b hr_mb-sm">
+
+<div class="print-show">
+    <div class="online-contact online-contact_mr-sm">
+        <img style="position:relative;top:3px;margin-right:3px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAQCAYAAAAWGF8bAAAACXBIWXMAAAsTAAALEwEAmpwYAAABNmlDQ1BQaG90b3Nob3AgSUNDIHByb2ZpbGUAAHjarY6xSsNQFEDPi6LiUCsEcXB4kygotupgxqQtRRCs1SHJ1qShSmkSXl7VfoSjWwcXd7/AyVFwUPwC/0Bx6uAQIYODCJ7p3MPlcsGo2HWnYZRhEGvVbjrS9Xw5+8QMUwDQCbPUbrUOAOIkjvjB5ysC4HnTrjsN/sZ8mCoNTIDtbpSFICpA/0KnGsQYMIN+qkHcAaY6addAPAClXu4vQCnI/Q0oKdfzQXwAZs/1fDDmADPIfQUwdXSpAWpJOlJnvVMtq5ZlSbubBJE8HmU6GmRyPw4TlSaqo6MukP8HwGK+2G46cq1qWXvr/DOu58vc3o8QgFh6LFpBOFTn3yqMnd/n4sZ4GQ5vYXpStN0ruNmAheuirVahvAX34y/Axk/96FpPYgAAACBjSFJNAAB6JQAAgIMAAPn/AACA6AAAUggAARVYAAA6lwAAF2/XWh+QAAABP0lEQVR42qTUvy9lURDA8Y/3bhQkolTpNUKh0OFPIFmrYgu0iEKi0GnEU6NZsslWPKzXij/ghYRSpxCViubFr2Zucvfm+vGY5CQnZ2a+Z+bMnGmp1+t92EY/yr4mTzjHdIIddON3KL4iZYxhN0EvtjCLFrw0CevCbQQzU8qE3IE7rDUBW8cNetLsShnlPU6wGIYfSQULOMRVepgFPmMC1TCsfACbxwHG8VgEhAZ+Yj8cKu/AqgFrZJWlAodGRJpCNwpgtbi4kXdO3kgpQWfs5zLn6b4nqnv9GWAb/mEEK9FWKaiKP/iLUwzloUkB7BjDWMYqWrEZ+tlIcwx7RdA88CgHS9/0V87uGKPxzqcYKCpKGe1YysDek1pAH8LvvwjL0emDTX67WqyUIcEFfmSg3xkOlwkmYzhMfXN8nWHmdQDuD0uVFVeeAgAAAABJRU5ErkJggg==" alt="" />
+        E-Mail: <a href="mailto:info@adverti.ru">info@adverti.ru</a>
+    </div>
+
+    <div class="online-contact online-contact_mr-sm">
+        <img style="position:relative;top:3px;margin-right:3px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAABNmlDQ1BQaG90b3Nob3AgSUNDIHByb2ZpbGUAAHjarY6xSsNQFEDPi6LiUCsEcXB4kygotupgxqQtRRCs1SHJ1qShSmkSXl7VfoSjWwcXd7/AyVFwUPwC/0Bx6uAQIYODCJ7p3MPlcsGo2HWnYZRhEGvVbjrS9Xw5+8QMUwDQCbPUbrUOAOIkjvjB5ysC4HnTrjsN/sZ8mCoNTIDtbpSFICpA/0KnGsQYMIN+qkHcAaY6addAPAClXu4vQCnI/Q0oKdfzQXwAZs/1fDDmADPIfQUwdXSpAWpJOlJnvVMtq5ZlSbubBJE8HmU6GmRyPw4TlSaqo6MukP8HwGK+2G46cq1qWXvr/DOu58vc3o8QgFh6LFpBOFTn3yqMnd/n4sZ4GQ5vYXpStN0ruNmAheuirVahvAX34y/Axk/96FpPYgAAACBjSFJNAAB6JQAAgIMAAPn/AACA6AAAUggAARVYAAA6lwAAF2/XWh+QAAABhklEQVR42nTTz4uNcRQG8M99TSZECl1JxmT8yMiPlZWSRhY2akxNshE2MymlrNVsbdhYXSxIyl+AUlYab0KRiMzMBhsKucqvzXPr29t1Nu/5Pp3zvM/3nOfbquta4iSOYwte4iY+YjEW8ESfGMj3FiYLfB3GGrXzuIoZ/OmBVf482Yf8N+bwPucNuIAX2FgSnG80fgvpQAqHsQRTId2Gx1jeIxgpmn9hf6S2MY3T6OIKDkb+alyHVl3XD7EvBM+xK/kC1id/ij3JuxhMvrlCp1DQLvIJXMIsdmcLz4pmGK+wqEFwB0vxCGexN/gD7GzMa2uFNQ1wHN9xOXkbn3AOK3K1Xvys8LYAXuFQfHEmaj7gHpbhK64V9XMV7hfALO7iWIzTi7E4UmMGByp8yYrgaPYMQ1njdKR/zu5PlAStvIXBOG5tZE7hRmM2R3ARmwrsTat4TEOZ9HDOP/AOf+OHlX3sfqoqB4LRTL8b+45ix3+ab6NTKihjVdw5Ulj8MLbjda7XgX8DAAKjWj5JeqFdAAAAAElFTkSuQmCC" alt="" />
+        Skype: <a href="skype:adverti_moscow">adverti_moscow</a>
+    </div>
+
+    <div class="online-contact online-contact_mr-sm">
+        <img style="position:relative;top:3px;margin-right:3px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAABNmlDQ1BQaG90b3Nob3AgSUNDIHByb2ZpbGUAAHjarY6xSsNQFEDPi6LiUCsEcXB4kygotupgxqQtRRCs1SHJ1qShSmkSXl7VfoSjWwcXd7/AyVFwUPwC/0Bx6uAQIYODCJ7p3MPlcsGo2HWnYZRhEGvVbjrS9Xw5+8QMUwDQCbPUbrUOAOIkjvjB5ysC4HnTrjsN/sZ8mCoNTIDtbpSFICpA/0KnGsQYMIN+qkHcAaY6addAPAClXu4vQCnI/Q0oKdfzQXwAZs/1fDDmADPIfQUwdXSpAWpJOlJnvVMtq5ZlSbubBJE8HmU6GmRyPw4TlSaqo6MukP8HwGK+2G46cq1qWXvr/DOu58vc3o8QgFh6LFpBOFTn3yqMnd/n4sZ4GQ5vYXpStN0ruNmAheuirVahvAX34y/Axk/96FpPYgAAACBjSFJNAAB6JQAAgIMAAPn/AACA6AAAUggAARVYAAA6lwAAF2/XWh+QAAABlElEQVR42nzTTYiNcRQG8N8dl0yRr5IS6qqxmRWNFRJCKOUjO/koYYyZ6e4tbGQx0iVSsrFTLI0kDCnyNhYsBtlY0SywQEl3bJ5bby/jbN73/z/nPOd/nvOcWlEUKrYew3iCFq7gIKZwHYPl4HoleSMeocBZnMYC7MNs3MYMnJoO4CQ+oA/z8SWvuRv/IEbKAF2l5IVJXpwqX3O/shSzJkXPYU4Z4Bo+4hDm4n7uJ7A8/4fDxUMcwHus6MJlHMN+bMEFbMJR/EYbvbiBi9iMBrrRqqM/vY2mUhOTYXwcq/Eae3EnMd34hZe1oijuoQdH4mhgHWYlqRcvUr0vnDTwGUvq2IHHGV/Zmvm+yTS2h7OJaGQ3jtfT46S/bQSr8pqleeWPkv8ErnamsOcfAMMh91uI/o4NVRF2AAYqyUPpeTx6GMArjOESzkTmzVppF3oy/7fYlrvRjHZmzlP4GU5aOF+W8jssS/WOPQt5WyNtUWB7ul14gJtYm/b68RS3MC9qbP9vG3cGZCwAz7ELi9LGpyrTfwYAmeRdljx5YfYAAAAASUVORK5CYII=" alt="" />
+        ICQ: 274170664
+    </div>
+</div>
+</section>

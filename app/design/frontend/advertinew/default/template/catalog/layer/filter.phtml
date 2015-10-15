@@ -1,0 +1,65 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2014 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Template for filter items block
+ *
+ * @see Mage_Catalog_Block_Layer_Filter
+ */
+?>
+
+<?php $counter = 0;?>
+<?php $items = $this->getItems();?>
+<?php if ($items[0]->getName()!='cat'):?>
+    <?php foreach ($items as $_item): ?>
+        <div class="checkbox js-checkbox-block">
+            <input
+                name="<?php echo $_item->getName();?>"
+                value="<?php echo $_item->getValue() ?>"
+                type="checkbox"
+                class="checkbox__item js-filter-checkbox"
+                id="filt_<?php echo $_item->getName();?><?php echo $_item->getValue() ?>"
+                data-counter="<?php echo $counter ?>"
+                <?php echo $_item->getState();?>
+            />
+            <label for="filt_<?php echo $_item->getName();?><?php echo $_item->getValue() ?>" class="checkbox__label">
+                <?php echo $_item->getLabel() ?>
+            </label>
+        </div>
+        <?php $counter++?>
+    <?php endforeach ?>
+
+    <div class="show-all-options js-show-all-options"><a>Показать все</a></div>
+    <div class="show-all-options js-hide-all-options"><a>Свернуть</a></div>
+<?php else:?>
+    <ul>
+        <?php foreach ($this->getItems() as $_item): ?>
+            <li><a href="javascript:void(0);" data-cat="<?php echo $_item->getValue() ?>" class="js-filt-cat"><?php echo $_item->getLabel() ?></a></li>
+        <?php endforeach ?>
+    </ul>
+<?php endif;?>
+

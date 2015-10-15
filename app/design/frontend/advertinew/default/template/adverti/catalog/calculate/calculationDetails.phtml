@@ -1,0 +1,103 @@
+<?php /** @var Adverti_Calculate_Block_CalculationDetails $this */ ?>
+<?php $oldCalculation=$this->getOldCalculation();?>
+<div id="calculation-details">
+    <div class="roll-up roll-up_mb-r js-roll-up js-roll-up-show-link" data-rollup-id="full-info">
+
+        <div class="sum-line sum-line-with-bg">
+            <div class="sum-line__left">
+                <span class="sum-line__inner">
+                    Всего за тираж из <span class="bold"><?php echo $this->getCount(); ?>&nbsp;шт.</span>
+                    <?php if($oldCalculation){?> со скидкой <?php echo number_format($oldCalculation['percent'], 2, ',', ' ');?>%
+                        <?php if(!$oldCalculation['service_is_enable']){?> на изделие<?php }?>
+                    <?php }?>
+                </span>
+            </div>
+            <div class="sum-line__right">
+                <span class="sum-line__inner">
+                    <span class="title-vsm bold nowrap product-amount-price">
+                        <?php if($oldCalculation){?><span class="calculate_oldprice"> <?php echo number_format($oldCalculation['total']['amount'], 2, ',', ' '); ?>&nbsp;руб.</span><?php }?>
+                        <span class="js-amount-price"><?php echo number_format($this->getTotalAmount(), 2, ',', ' '); ?></span>&nbsp;руб.
+                    </span>
+                </span>
+            </div>
+        </div>
+
+        <div class="roll-up__content_border-r print-show-n">
+            <div class="d-table-w">
+                <table class="d-table d-table_head-plr d-table_body-vtop d-table_2-child-width d-table_plr d-table_a-left d-table_d-f-lh d-table_color-black d-table_f-c-c-gray d-table_print-compact">
+                    <tbody>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td class="vsmall-size lh-sm print-black">Цена за шт.</td>
+                        <td class="vsmall-size lh-sm print-black">
+                            Цена тиража&nbsp;<?php echo $this->getCount(); ?>&nbsp;шт.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td  class="first-child">Наименование</td>
+                        <td><?php echo $this->getProductName(); ?><br/> Артикул: <?php echo $this->getSku(); ?></td>
+                        <td>
+                            <?php echo number_format($this->getProductPrice(), 2, ',', ' '); ?>&nbsp;руб.
+                        </td>
+                        <td>
+                            <?php echo number_format($this->getProductAmount(), 2, ',', ' ') ?>&nbsp;руб.
+                        </td>
+                    </tr>
+                    <?php if (count($this->getPrints())): ?>
+                    <?php $prints=$this->getPrintsTable()?>
+                    <?php for($i=0;$i<count($prints);$i++): ?>
+                        <tr>
+                                <?php if ($i==0) : ?>
+                                    <td rowspan="<?php echo count($prints)?>" class="first-child">Нанесение</td >
+                                <?php endif ?>
+                            <td>
+                                    <?php echo $prints[$i]['title']; ?>
+                            </td>
+                            <td>
+                                <?php echo number_format($prints[$i]['price'], 2, ',', ' '); ?>&nbsp;руб.
+                            </td>
+                            <td>
+                                <?php echo number_format($prints[$i]['amount'], 2, ',', ' '); ?>&nbsp;руб.
+                            </td>
+                        </tr>
+                    <?php endfor; ?>
+                    <?php endif ?>
+                    <?php if (count($this->getServices())): ?>
+                        <tr>
+                            <td  class="first-child">Доп. услуга</td>
+                            <td class="print-vtop">
+                                <?php foreach ($this->getServices() as $service): ?>
+                                    <?php echo $service ?><br/>
+                                <?php endforeach; ?>
+                            </td>
+                            <td>
+                                <?php echo number_format($this->getServicesPrice(), 2, ',', ' '); ?>&nbsp;руб.
+                            </td>
+                            <td>
+                                <?php echo number_format($this->getServicesAmount(), 2, ',', ' '); ?>&nbsp;руб.
+                            </td>
+                        </tr>
+                    <?php endif; ?>
+                    <!--                    <tr>-->
+                    <!--                        <td colspan="2">&nbsp;</td>-->
+                    <!--                        <td>--><?php //echo number_format($this->getProductPrice() + $price + $infliction['price'], 2, ',', ' '); ?><!--&nbsp;руб.</td>-->
+                    <!--                        <td>&nbsp;</td>-->
+                    <!--                    </tr>-->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="sum-line">
+            <div class="sum-line__left">
+
+            </div>
+            <div class="sum-line__right">
+
+                <input class="button print-hide js-add-to-cart-popup" id="in_basket" type="submit" name="test"
+                       value="В корзину" onclick="ga('send', 'pageview', '/virtual/add_to_basket');yaCounter<?php echo Mage::getStoreConfig('yandex/metric/code')?>.reachGoal('AddBasket');"/>
+            </div>
+        </div>
+
+
+    </div>
+</div>

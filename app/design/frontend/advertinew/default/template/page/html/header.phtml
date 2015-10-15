@@ -1,0 +1,49 @@
+<!--LiveInternet counter--><script type="text/javascript"><!--
+    new Image().src = "//counter.yadro.ru/hit?r"+
+        escape(document.referrer)+((typeof(screen)=="undefined")?"":
+        ";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+            screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+        ";"+Math.random();//--></script><!--/LiveInternet-->
+
+<header class="header container clearfix">
+    <?php if($_SERVER['REQUEST_URI']=='/') { ?>
+        <div class="logo"><?php echo($this->getChildHtml('logo'))?></div>
+    <?php } else { ?>
+    <a href="/" class="logo print-hide"><?php echo($this->getChildHtml('logo'))?></a>
+    <div class="logo logo_print print-show">
+        <img src="/skin/frontend/advertinew/default//images/theme/default/logo.png" alt="">
+    </div>
+    <?php } ?>
+    <div class="calls">
+        <div class="calls__item calls__item_pt-7 calls__item_less-1200 calls__item_p-sides-r print-hide
+            calls__item_2-1-mb-23">
+            <div class="callback-phone">
+                <div class="callback-phone__title"><i>Корпоративные сувениры<br />и подарки с логотипом</i></div>
+            </div>
+        </div>
+        <div class="calls__item">
+            <div class="callback-phone">
+                <div class="callback-phone__title orange">Бесплатный звонок по РФ</div>
+                <div class="callback-phone__phone"><?php echo($this->getChildHtml('free_phone')) ?></div>
+<!--                <div class="callback-phone__add gray">многоканальный</div>-->
+            </div>
+        </div>
+        <div class="calls__item calls__item_5-mr">
+            <div class="callback-phone">
+                <div class="callback-phone__title">Телефон в Москве</div>
+                <div class="callback-phone__phone"><?php echo $this->getChildHtml('phones_on_main')?></div>
+<!--            <div class="callback-phone__add gray">--><?php //echo $this->getChildHtml('phone_rezhim')?><!--</div>-->
+            </div>
+        </div>
+        <div class="calls__item calls__item_mt-22 calls__item_2-1-mb-23 print-hide">
+
+            <a class="js-add-call-button bbottom-r dotted" href="#">
+                <span class="icon icon_phone"></span><span class="link-inner">Заказать звонок</span>
+            </a>
+            <?php /*echo $this->getChildHtml('get_cell')*/?>
+        </div>
+    </div>
+</header>
+<!-- навигация -->
+<?php echo($this->getChildHtml('menu_on_main')) ?>
+<!--- меню -->

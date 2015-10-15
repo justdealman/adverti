@@ -1,0 +1,33 @@
+<?php /** @var Mage_Page_Block_Html_Pager $this */ ?>
+<?php if ($this->getCollection()->getSize()): ?>
+    <?php if ($this->getLastPageNum() > 1): ?>
+        <div class="paginator paginator-filter"> Страница:
+            <?php if (!$this->isFirstPage()) : ?>
+                <a href="<?php echo $this->getPreviousPageUrl() ?>#filter-block" class="paginator__prev">назад</a>
+            <?php else : ?>
+                <span class="paginator__prev" style="background: none"></span>
+            <?php endif ?>
+
+            <div class="paginator__pages">
+                <?php
+                $frame = $this->getFramePages();
+                $last = end($frame);
+                foreach ($frame as $_page): ?>
+                    <?php if ($this->isPageCurrent($_page)) : ?>
+                        <span class="paginator__pages__item active"><?php echo $_page ?></span>
+                    <?php else : ?>
+                        <a class="paginator__pages__item<?php if ($last == $_page):
+                            ?> paginator__pages__item_ie8last<?php endif ?>" href="<?php
+                        echo $this->getPageUrl($_page) ?>#filter-block"><?php
+                            echo $_page ?></a>
+                    <?php endif ?>
+                <?php endforeach ?>
+            </div>
+            <?php if (!$this->isLastPage()) : ?>
+                <a href="<?php echo $this->getNextPageUrl() ?>#filter-block" class="paginator__next">далее</a>
+            <?php else : ?>
+                <span class="paginator__next" style="background: none"></span>
+            <?php endif ?>
+        </div>
+    <?php endif ?>
+<?php endif ?>

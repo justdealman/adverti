@@ -1,0 +1,82 @@
+<?php /* @var Adverti_Adverti_Block_Captcha_Zend $this */ ?>
+
+    <h1 class="hdr2">Подтверждение заказа</h1>
+    <br/>
+<?php /* @var Mage_Core_Block_Template $captcha */ ?>
+<?php $captcha = $this->getCaptchaModel() ?>
+
+    <form action="<?php echo $this->getUrl('adverti/order/confirm') ?>" method="post">
+        <dl>
+            <dt><!--[if IE 8]><label for="email_phone">Введите код с картинки</label><![endif]--></dt>
+            <dd>
+                <img id="<?php echo $this->getFormId() ?>" class="captcha-img" height="<?php
+                echo $this->getImgHeight() ?>" src="<?php echo $captcha->getImgSrc() ?>"/>
+                <br>
+                <br>
+                <table>
+                    <tr>
+                        <td>
+                            <input type="text" name="<?php
+                            echo Mage_Captcha_Helper_Data::INPUT_NAME_FIELD_VALUE ?>[<?php echo $this->getFormId() ?>]"
+                                   id="captcha_<?php echo $this->getFormId() ?>" class="input-text"
+                                   placeholder="Введите код с картинки" style="margin-bottom: 0">
+                        </td>
+                        <td>
+                            <img id="captcha-reload" class="captcha-reload" style="cursor: pointer;" src="<?php
+                            echo $this->getSkinUrl('images/reload.png') ?>"
+                                 alt="<?php echo $this->__('Reload captcha') ?>"
+                                 onclick="reloadCaptcha()">
+                        </td>
+                    </tr>
+                </table>
+            </dd>
+            <dt>&nbsp;</dt>
+            <dd>
+                <input type="submit" value="Отправить" class="button">
+            </dd>
+        </dl>
+    </form>
+
+    <script type="text/javascript">//<![CDATA[
+        function reloadCaptcha() {
+            $.ajax({
+                url: '<?php echo $this->getRefreshUrl() ?>',
+                type: "post",
+                data: {formId: "<?php echo $this->getFormId()?>"},
+                dataType: "json",
+                success: function (data) {
+
+                    if (data.imgSrc) {
+
+                        $("#<?php echo $this->getFormId() ?>").attr("src", data.imgSrc);
+                    }
+                }
+            });
+        }
+        <?php /*?>$('<?php echo $this->getFormId() ?>').captcha = new Captcha('<?php echo $this->getRefreshUrl() ?>', '<?php
+        echo $this->getFormId() ?>');<?php */?>
+        //]]></script>
+
+
+<?php /*?>
+<div class="form-item">
+    <label for="captcha_<?php echo $this->getFormId() ?>" class="form-item__title required">Защита от спама<sup
+            class="necessary-red">*</sup></label>
+    <span class="spam-filter-text">
+        <img id="<?php echo $this->getFormId() ?>" class="captcha-img" height="<?php
+        echo $this->getImgHeight() ?>" src="<?php echo $captcha->getImgSrc() ?>"/>
+        <br>
+        <?php /*?><a href="#" onclick="$('<?php echo $this->getFormId() ?>').captcha.refresh(this); return false">Обновить код</a><?php */ /*?>
+    </span>
+    <input type="text" class="form-item__text form-item__text_sm" name="<?php
+    echo Mage_Captcha_Helper_Data::INPUT_NAME_FIELD_VALUE ?>[<?php echo $this->getFormId() ?>]"
+           id="captcha_<?php echo $this->getFormId() ?>">
+    <img id="captcha-reload" class="captcha-reload" style="cursor: pointer;margin-bottom: -7px;" src="<?php
+    echo $this->getSkinUrl('images/reload.png') ?>" alt="<?php echo $this->__('Reload captcha') ?>" onclick="$('<?php
+    echo $this->getFormId()?>').captcha.refresh(this)">
+    <script type="text/javascript">//<![CDATA[
+        $('<?php echo $this->getFormId() ?>').captcha = new Captcha('<?php echo $this->getRefreshUrl() ?>', '<?php
+        echo $this->getFormId() ?>');
+        //]]></script>
+</div><?php */
+?>

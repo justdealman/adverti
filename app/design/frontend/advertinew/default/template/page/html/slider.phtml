@@ -1,0 +1,110 @@
+<?php
+    /** @var Adverti_Svisto_Block_Promobaner $this */
+    $categoryes = $this->getPromocategories();
+
+?>
+<div class="sliders-in-col clearfix">
+<div class="sliders-in-col__left-w">
+    <div class="sliders-in-col__left">
+
+        <div class="promo-slider js-promo-slider">
+            <ul class="promo-slider__inner">
+
+                <li>
+                    <div class="promo-slider__content promo-slider__content_main">
+                        <div class="promo-slider__content__title">
+                            <?php echo $this->getChildHtml('title_slider') ?>
+                        </div>
+                        <div class="promo-slider__content_main__text">
+                            <?php echo $this->getChildHtml('description_slider')?>
+                        </div>
+                    </div>
+                </li>
+<?php foreach($categoryes as $cat) {?>
+                <li>
+                    <div class="promo-slider__content promo-slider__content_products">
+                        <div class="promo-slider__content__header clearfix">
+                            <div class="promo-slider__content__title fleft"><?php echo $cat->getName() ?></div>
+                            <a href="<?php echo $cat->getUrl() ?>" class="fright">Посмотреть всю подборку &raquo;</a>
+                        </div>
+                        <div class="promo-product-w">
+                            <?php foreach($this->getItem($cat) as $product) { ?>
+                            <?php
+                                 Mage::helper('calculate')->isDiscounted($product);
+                            ?>
+                            <a href="<?php echo $product->getUrlKey().'.html' ?>" class="promo-product">
+                                <?php if($product->getData('recommended_price_old')) {?><div class="discount-flag">скидка</div><?php }?>
+                                <?php if($product->getData('archive')) {?><div class="archive-flag">Архивный товар</div><?php }?>
+                                <div class="promo-product__image-w">
+                                    <img class="promo-product__image promo-product__image_max-height" src="<?php  echo $this->helper('catalog/image')->init($product, 'small_image')->resize(210)->setQuality(100); ?>"
+                                         alt=""/>
+                                </div>
+                                <div class="promo-product__title-w promo-product__title-w_hidden-1-col promo-product__title-w_hidden-2-col">
+                                    <div class="promo-product__title"><?php echo $product->getName() ?></div>
+                                </div>
+                                <div class="promo-product__price">
+                                    <?php if($product->getData('recommended_price_old')) {?>
+                                        <span class="catalog_oldprice"><?php echo number_format($product->getData('recommended_price_old'), 2, ',', ' ');?></span>
+                                    <?php }?>
+                                    <?php echo number_format($product->getData('recommended_price'), 2, ',', ' ');?><!--<span class="rouble">a</span>-->&nbsp;руб.
+                                </div>
+                            </a>
+                            <?php } ?>
+                        </div>
+                    </div>
+                </li>
+<?php } ?>
+
+            </ul>
+            <div class="promo-slider__controls">
+                <div class="promo-slider__controls__item">
+                    <a class="promo-slider__controls__link" href="#"><span class="icon icon_hedgehog"></span></a>
+                </div>
+                <?php foreach($categoryes as $cat) {?>
+                <div class="promo-slider__controls__item">
+                    <a class="promo-slider__controls__link" data-id="<?php echo $cat->getData('entity_id') ?>" href="#"><?php echo $cat->getName() ?></a>
+                </div>
+                <?php } ?>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<?php if (count($this->getItemForPromo())): ?>
+    <div class="sliders-in-col__right">
+    <div class="adaptive-slider adaptive-slider_vertical-in-one js-adaptive-slider-top">
+        <div class="discount-flag">Скидки</div>
+
+        <div class="adaptive-slider__pages-info">
+            <span class="adaptive-slider__pages-info__pages"></span>
+            <span class="delimeter"></span>
+            <a href="#" class="adaptive-slider__pages-info__tobegin dotted">В начало</a>
+        </div>
+        <!--<ul class="adaptive-slider__inner"></ul>-->
+        <!-- сюда вставляются слайды из заготовки <div class="adaptive-slider__content"></div> -->
+        <div class="adaptive-slider__premade">
+            <?php foreach ($this->getItemForPromo() as $discountProduct): ?>
+
+            <a href="<?php echo Mage::getBaseUrl().$discountProduct->getData('url_path') ?>" class="promo-product promo-product_adaptive-slider promo-product1">
+                <div class="promo-product__image-w">
+                    <img class="promo-product__image" src="<?php  echo $this->helper('catalog/image')->init($discountProduct, 'small_image')->resize(210)->setQuality(100); ?>"
+                         alt=""/>
+                </div>
+                <div class="promo-product__title-w promo-product__title-w_hidden-1-col promo-product__title-w_hidden-2-col">
+                    <div class="promo-product__title"><?php echo $discountProduct->getName() ?></div>
+                </div>
+                <div class="promo-product__price">
+                    <div class="promo-product__price__oldprice"><?php echo $discountProduct->getOldPrice() ?><!--<span class="rouble">a</span>-->&nbsp;руб.</div>
+                    <div class="promo-product__price__price"><?php echo $discountProduct->getPriceLow() ?><!--<span class="rouble">a</span>-->&nbsp;руб.</div>
+                </div>
+                <div class="promo-product__additional">при тираже&nbsp;<?php echo $discountProduct->getPromoCount() ?> шт.</div>
+            </a>
+            <?php endforeach; ?>
+        </div>
+    </div>
+    </div>
+<?php endif;?>
+
+</div>

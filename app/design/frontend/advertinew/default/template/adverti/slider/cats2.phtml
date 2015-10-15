@@ -1,0 +1,36 @@
+<?php
+    /** @var Adverti_Svisto_Block_Promobaner $this */
+
+?>
+
+<?php if(count($this->getItemForSlideNew()->getData())) { ?>
+<h2 class="title-sm title_mr-b">Новинки</h2>
+
+<div class="adaptive-slider js-adaptive-slider-fsize">
+    <div class="adaptive-slider__pages-info">
+        <span class="adaptive-slider__pages-info__pages"></span>
+        <span class="delimeter"></span>
+        <a href="#" class="adaptive-slider__pages-info__tobegin dotted">В начало</a>
+    </div>
+    <!--<ul class="adaptive-slider__inner"></ul>-->
+    <!-- сюда вставляются слайды из заготовки <div class="adaptive-slider__content"></div> -->
+    <div class="adaptive-slider__premade">
+ <?php foreach($this->getItemForSlideNew() as $product) { ?>
+       <a href="<?php echo Mage::getBaseUrl().$product->getUrlKey().'.html' ?>" class="promo-product promo-product_adaptive-slider promo-product1">
+            <div class="promo-product__image-w">
+                <img class="promo-product__image" src="<?php  echo $this->helper('catalog/image')->init($product, 'small_image')->resize(210)->setQuality(100); ?>"
+                     alt=""/>
+            </div>
+
+            <div class="promo-product__title-w promo-product__title-w_hidden-1-col promo-product__title-w_hidden-2-col">
+                <div class="promo-product__title"><?php echo $product->getName() ?></div>
+            </div>
+            <div class="promo-product__price">
+                <div class="promo-product__price__price"><?php echo number_format($product->getData('recommended_price'), 2, ',', ' ');?><!--<span class="rouble">a</span>-->&nbsp;руб.</div>
+            </div>
+            <div class="promo-product__additional">при тираже&nbsp;<?php echo number_format($product->getData('recommended_count'), 0, ',', ' ') ?> шт.</div>
+        </a>
+<?php } ?>
+    </div>
+</div>
+<?php } ?>

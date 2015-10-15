@@ -1,0 +1,12 @@
+<?php
+$category = Mage::registry('current_category');
+if ($category): ?>
+
+    <?php if($category->getData('parent_id')!=2) : ?>
+    <?php $advertisement = $category->getData('advertisement');
+          $advertisement = str_replace('../','/',$advertisement);
+          $advertisement = str_replace('http://www.adverti.ru/','/',$advertisement);
+          echo($advertisement);
+        ?>
+    <?php endif; ?>
+<?php endif; ?>

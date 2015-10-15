@@ -1,0 +1,47 @@
+<?php
+    $letter = Mage::registry('letter');
+?>
+<h1 class="letter-title"><?php echo $letter['title']?></h1>
+<div class="letter-description">
+    <?php echo $letter['description']?>
+</div>
+
+<?php if(count($letter['groups_data'])):?>
+
+    <?php foreach($letter['groups_data'] as $group):?>
+        <h3 class="letter-title-group"><?php echo $group['title'];?></h3>
+
+                <?php foreach ($group['products'] as $product){ ?>
+                    <?php
+                        Mage::helper('calculate')->isDiscounted($product);
+                    ?>
+                    <div class="cols-4__item">
+                        <a href="<?php echo $product->getProductUrl() ?>" class="promo-product promo-product_adaptive-slider promo-product_full-w">
+                            <?php if($product->getData('recommended_price_old')) {?><div class="discount-flag">скидка</div><?php }?>
+                            <?php if($product->getData('archive')) {?><div class="archive-flag">Архивный товар</div><?php }?>
+                            <div class="promo-product__image-w">
+                                <img class="promo-product__image" src="<?php
+                                echo $this->helper('catalog/image')->init($product, 'small_image')->resize(210)->setQuality(100); ?>" alt="<?php
+                                echo $this->stripTags($this->getImageLabel($product, 'small_image'), null, true) ?>"
+                                     alt=""/>
+                            </div>
+                            <div class="promo-product__title-w promo-product__title-w_hidden-1-col">
+                                <div class="promo-product__title"><?php echo $this->escapeHtml($product->getName()) ?></div>
+                            </div>
+                            <div class="promo-product__price">
+                                <div class="promo-product__price__price">
+                                    <?php if($product->getData('recommended_price_old')) {?>
+                                        <span class="catalog_oldprice"><?php echo number_format($product->getData('recommended_price_old'), 2, ',', ' ');?></span>
+                                    <?php }?>
+                                    <?php echo number_format($product->getData('recommended_price'), 2, ',', ' ');?><!--<span class="rouble">a</span>-->&nbsp;руб.
+                                </div>                            </div>
+                            <div class="promo-product__additional">при тираже&nbsp;<?php echo number_format($product->getData('recommended_count'), 0, ',', ' ') ?>&nbsp;шт.</div>
+                            <div class="promo-product__sku"><?php echo $product->getSku() ?></div>
+                        </a>
+                    </div>
+                <?php } ?>
+
+
+    <?php endforeach; ?>
+
+<?php endif;?>

@@ -1,0 +1,88 @@
+<h1><?php echo $this->__(Mage::getStoreConfig('clnews/news/title')) ?>
+
+<?php if (Mage::getStoreConfig('clnews/rss/enable')): ?>
+    <?php if ($this->getCurrentCategory()): ?>
+    <?php $categoryId = $this->getCurrentCategory()->getId() ?>
+    <?php endif ?>
+    <a href="<?php echo Mage::Helper('clnews')->getRssLink(isset($categoryId)?$categoryId:null) ?>">
+        <img src="<?php echo $this->getSkinUrl('css/clnews/images/rss.gif') ?>">
+    </a>
+<?php endif ?>
+</h1>
+
+<ol class="news-all">
+
+<?php $items = $this->getNewsItems() ?>
+<?php foreach ($items as $item): ?>
+    <li class="news-all__item">
+    <?php if ($item->getImageShortContentShow() && $item->getImageShortContent()): ?>
+        <?php $imageSize = $this->getShortImageSize($item) ?>
+        <div class="news_image"><img src="<?php echo Mage::helper('clnews')->resizeImage(str_replace('clnews/', '', $item->getImageShortContent()), $imageSize['width'], $imageSize['height'], 'clnews'); ?>" /></div>
+    <?php endif; ?>
+    <a class="news-all__link"  href="<?php echo $item->getUrl($this->getCategory()) ?>" ><?php echo $item->getTitle();?></a>
+    <?php if (Mage::helper('clnews')->showDate()): ?>
+        <div class="news-all__date"><?php echo Mage::helper('clnews')->formatDate($item->getNewsTime()) ?></div>
+    <?php endif ?>
+        <article class="news-all__text">
+            <?php echo Mage::helper('clnews')->contentFilter($item->getShortContent()) ?>
+
+            <?php if(Mage::helper('clnews')->enableLinkRoute()): ?>
+                <?php if($link = Mage::helper('clnews')->getLinkRoute()): ?>
+                    <a href="<?php echo $item->getUrl($this->getCategory()) ?>" class="more"><?php echo $link . '&raquo;';?></a>
+                <?php else: ?>
+                    <a href="<?php echo $item->getUrl($this->getCategory()) ?>" class="more"><?php echo $this->__('view more') . '&raquo;';?></a>
+                <?php endif; ?>
+            <?php endif; ?>
+        </article>
+    <?php if (Mage::helper('clnews')->showCategory()): ?>
+        <?php if ($this->getCategoryByNews($item->getID())->getData('title') != ''): ?>
+        <div class="news-all__date">&nbsp;|&nbsp; <?php echo $this->getCategoryByNews($item->getID())->getData('title') ?></div>
+        <?php endif; ?>
+    <?php endif; ?>
+    <?php if ($item->getAuthor()): ?>
+        <div class="news-all__date">&nbsp;<?php if (Mage::helper('clnews')->showAuthor()): ?>|&nbsp; <?php echo $item->getAuthor() ?><?php endif;?></div>
+    <?php endif ?>
+
+
+
+        <?php if($item->getCommentsEnabled()): ?>
+        <div>
+            <a href="<?php echo $item->getUrl($this->getCategory()) ?>#commentBox" class="comment"><?php echo $item->getCommentsCount(); ?> <?php echo $this->__('Comment(s)') ?></a>
+        </div>
+        <?php endif; ?>
+
+    </li>
+<?php endforeach; ?>
+
+</ol>
+<hr class="hr hr_mt-b hr_mb-sm">
+<?php if ($this->getLastPageNum() > 1): ?>
+    <div class="paginator">
+        <?php if (!$this->isFirstPage()) : ?>
+            <a href="<?php echo $this->getPreviousPageUrl() ?>" class="paginator__prev"></a>
+        <?php else : ?>
+            <span class="paginator__prev" style="background: none"></span>
+        <?php endif ?>
+
+        <div class="paginator__pages">
+            <?php
+            $frame = $this->getPages();
+            $last = end($frame);
+            foreach ($frame as $_page): ?>
+                <?php if ($this->isPageCurrent($_page)) : ?>
+                    <span class="paginator__pages__item active"><?php echo $_page ?></span>
+                <?php else : ?>
+                    <a class="paginator__pages__item<?php if ($last == $_page):
+                        ?> paginator__pages__item_ie8last<?php endif ?>" href="<?php
+                    echo $this->getPageUrl($_page) ?>"><?php
+                        echo $_page ?></a>
+                <?php endif ?>
+            <?php endforeach ?>
+        </div>
+        <?php if (!$this->isLastPage()) : ?>
+            <a href="<?php echo $this->getNextPageUrl() ?>" class="paginator__next"></a>
+        <?php else : ?>
+            <span class="paginator__next" style="background: none"></span>
+        <?php endif ?>
+    </div>
+<?php endif ?>

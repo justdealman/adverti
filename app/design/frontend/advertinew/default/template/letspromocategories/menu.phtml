@@ -1,0 +1,9 @@
+<?php $categories = $this->getCategories();?>
+<?php foreach($categories as $category):?>
+    <li class="nav-n__inner-first__item custom">
+        <a class="nav-n__inner-first__item__link" href="<?php echo Mage::getBaseUrl().$category->url.'/';?>"><?php echo $category->name;?></a>
+        <div class="nav-n__inner-last-wrapper" style="display: none;">
+
+        </div>
+    </li>
+<?php endforeach;?>

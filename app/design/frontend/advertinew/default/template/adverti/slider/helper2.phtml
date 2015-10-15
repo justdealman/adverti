@@ -1,0 +1,19 @@
+<?php
+/** @var Adverti_Svisto_Block_Promobaner $this */
+
+?>
+<?php if($this->getSvistoCollection()->getData('footer_helper_enable')==1){ ?>
+<aside class="user-helper">
+    <div class="user-helper__title"><?php echo $this->getSvistoCollection()->getData('title_helper_foot')?></div>
+    <div class="user-helper__box">
+        <div class="user-helper__box__left">
+            <?php echo $this->getSvistoCollection()->getData('text_helper_foot')?>
+        </div>
+       <!-- <div class="user-helper__box__right">
+            <a class="nav-n__list__item__link nav-n__list__item__link_button nav-n__list__item__link_right-arrows nav-n__list__item__link_width-s" href="#">
+                <span class="nav-n__list__images__text nav-n__list__images__text_button">Другие статьи</span>
+            </a>
+        </div>-->
+    </div>
+</aside>
+<?php } ?>

@@ -1,0 +1,5 @@
+<?php
+$category = Mage::registry('current_category');
+if ($category): ?>
+    <?php echo $category->getData('advertisement') ?>
+<?php endif;

@@ -1,0 +1,464 @@
+<?php
+/** @var Adverti_Calculate_Block_Calculate $this */
+
+$product = $this->getProduct();
+$productView = new Mage_Catalog_Block_Product_View();
+?>
+<form action="<?php echo $productView->getAddToCartUrl($product) ?>" class="calc" id="calc" method="post">
+    <input type="hidden" name="id_product" id="child-product-id" value="<?php echo $product->getId(); ?>">
+    <input type="hidden" name="max_amoun_infliction"  value="5">
+    <input type="hidden" name="id" id="product-id" value="<?php echo $product->getId(); ?>">
+    <?php echo $this->getChildHtml('productAttributes'); ?>
+    <div class="product__controls">
+
+        <div class="product__controls__wrapper">
+            <?php //замутить в зависимости выбраных артов ?>
+            <?php if ($product->isSaleable() && ($product->getTypeId() == 'configurable')): ?>
+                <?php foreach ($this->getAllowAttributes() as $i => $_attribute): ?>
+                    <div class="select-help-group select-help-group_print" <?php if (count($_attribute->getPrices())<2):?>style="display: none;" <?php endif;?>>
+                    <div class="select-help-group__select">
+                        <?php /** @var Mage_Catalog_Model_Product_Type_Configurable_Attribute $_attribute */ ?>
+                        <label class="select-help-group__select__label required gray print-inline-block"
+                               for="attribute<?php echo $_attribute->getAttributeId(); ?>">
+                            <em>*</em><?php echo $_attribute->getLabel(); ?>
+                            <span class="print-show print-inline-block">:</span>
+                        </label>
+                        <div class="d-select d-select_w-a d-select_min-w-260 print-inline-block js-d-select">
+                            <select name="super_attribute[<?php echo $_attribute->getAttributeId(); ?>]"
+                                    id="attribute<?php echo $_attribute->getAttributeId(); ?>"
+                                    class="d-select__inner required-entry super-attribute-select js_select_update">
+                                   <option><?php echo $this->__('Choose an Option...'); ?></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+                <script type="text/javascript">
+                    var spConfig = new Product.Config(<?php echo $this->getJsonConfig() ?>);
+                </script>
+            <?php endif; ?>
+
+        <?php foreach ($this->getVariants() as $_option) { ?>
+            <?php if ($_option->getType() == 'radio') { ?>
+                <?php // radiobutton ?>
+            <?php } elseif ($_option->getType() == 'drop_down') { ?>
+                <?php // select ?>
+                <span class="gray"><?php echo $_option->getTitle() ?>:</span>
+                <div class="d-select d-select_w-a d-select_min-w-260 js-d-select">
+                    <select class="d-select__inner js_select_update" name="options[<?php echo $_option->getId() ?>]"
+                            id="select2">
+                        <?php foreach ($_option->getValues() as $_values) { ?>
+                            <option value="<?php echo $_values->getId() ?>"><?php echo $_values->getTitle() ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+            <?php } elseif ($_option->getType() == 'checkbox') { ?>
+                <?php //checkbox ?>
+                <div class="gray title_mb-sm"><?php echo $_option->getTitle() ?></div>
+                <?php foreach ($_option->getValues() as $_values) { ?>
+                    <table class="checkbox-t checkbox-t_1-2-full-w">
+                        <tr>
+                            <td>
+                                <div class="checkbox">
+                                    <input type="checkbox" class="checkbox__item js-check-on"
+                                           id="<?php echo $_values->getOptionTypeId() ?>"
+                                           value="<?php echo $_values->getSku() ?>"
+                                           name="options[<?php echo $_option->getId() ?>][]">
+                                    <label for="<?php echo $_values->getOptionTypeId() ?>" class="checkbox__label">
+                                        <?php echo $_values->getTitle() ?></label>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                <?php } ?>
+            <?php } elseif ($_option->getType() == 'multiple') { ?>
+                <?php //multiple mnozhestvenyji vybor ?>
+                <div class="gray title_mb-sm"><?php echo $_option->getTitle() ?></div>
+                <?php foreach ($_option->getValues() as $_values) { ?>
+                    <table class="checkbox-t checkbox-t_1-2-full-w">
+                        <tr>
+                            <td>
+                                <div class="checkbox">
+                                    <input type="checkbox" class="checkbox__item js-check-on"
+                                           id="<?php echo $_values->getOptionTypeId() ?>"
+                                           value="<?php echo $_values->getSku() ?>"
+                                           name="options[<?php echo $_option->getId() ?>]">
+                                    <label for="<?php echo $_values->getOptionTypeId() ?>" class="checkbox__label">
+                                        <?php echo $_values->getTitle() ?><!--<span class="vsmall-size blue nowrap">(+35.00 <span class="rouble">a</span>)</span>--></label>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                <?php } ?>
+            <?php } ?>
+        <?php } ?>
+
+        <?php echo $this->getChildHtml('inflictions'); ?>
+
+        </div>
+
+        <div class="product__controls__wrapper">
+            <div class="product__controls__left">
+        <?php if($this->iShow('dopusluga')){ ?>
+            <div class="gray title_mb-sm print-hide">Доп. услуги</div>
+            <div class="print-hide">
+                <input type="hidden" name="dopusluga_mandatory" value="<?php echo $product->getData('mandatory_services')?>">
+                <?php foreach($this->getAdditionalServices() as $service){ ?>
+                    <table class="checkbox-t checkbox-t_1-2-full-w">
+                        <tr>
+                            <td>
+                                <div class="checkbox">
+                                    <input type="checkbox" class="checkbox__item js-check-on"
+                                           id="d_u_<?php echo $service['entity_id'] ?>"
+                                           value="<?php echo $service['entity_id']?>"
+                                           name="dopusluga[<?php echo $service['entity_id'] ?>]"
+                                           <?php echo $this->checkMandatoryServices($service['entity_id'])?>
+                                        >
+                                    <label for="d_u_<?php echo $service['entity_id'] ?>" class="checkbox__label">
+                                        <?php echo $service['name'] ?>  <?php echo $this->labelMandatoryServices($service['entity_id'])?>
+                                    </label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="button-helper js-button-helper-with-scroll print-hide">
+                                    <a href="#" class="button-helper__button"><span class="button-helper__button__inner"></span></a>
+                                    <div class="button-helper__text button-helper__text_for-scroll vsmall-size lh-sm">
+                                        <div class="button-helper__text__inner">
+                                            <?php echo $service['description']?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                <?php } ?>
+                <?php if($product->getData('mandatory_services')):?>
+                      * - обязательная доп.услуга обусловленная технологическим процессом подготовки изделия
+                <?php endif?>
+                </div>
+      <?php } ?>
+                </div>
+            </div>
+        <?php if (!$product->getData('archive')){?>
+                             <?php echo $this->getChildHtml('calculationParams'); ?>
+         <?php }else { ?>
+             <div class="title-vsm bold">Архивный товар</div>
+             <script>
+                 jQuery(document).ready(function(){
+                     setTimeout(function(){ jQuery('.bx-wrapper-w').prepend('<div class="archive-flag">Архивный товар</div>')},1000);
+                 });
+             </script>
+         <?php }?>
+</div>
+</div>
+<?php //блок с доролнительной инфой ?>
+<div class="clearfix"></div>
+<div class="wrapper-right wrapper-right_mb print-hide">
+    <a href="#" class="bbottom-r js-add-consult-button">
+        <span class="icon icon_envelope"></span>
+        <span class="link-inner">Задать вопрос о товаре</span>
+    </a>
+</div>
+
+    <?php if (!$product->getData('archive')){?>
+
+            <?php echo $this->getChildHtml('calculationDetails'); ?>
+
+            <hr class="hr hr_m-r print-hide" />
+
+            <div class="sum-line sum-line-with-bg">
+                <div class="sum-line__left">
+                        <span class="sum-line__inner">
+                            Условия поставки</span>
+                        </span>
+                </div>
+            </div>
+            <div class="roll-up__content roll-up__content_border-gray print-show-n block">
+                <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('terms_of_delivery')->toHtml() ?>
+            </div>
+
+    <?php }?>
+
+</form>
+
+<?php if (!$product->getData('archive')){?>
+    <script>
+        (function ($) {
+            init_calculation_update();
+
+            check_amount_infliction();
+
+            function check_amount_infliction(){
+                var max_amoun_infliction= jQuery("input[name$='max_amoun_infliction']").val();
+                var button=jQuery('#clone-infliction');
+                var current_amoun_infliction=jQuery('.box-infliction').length+2;
+                if(current_amoun_infliction>max_amoun_infliction) {
+                    button.hide();
+                }else{
+                    button.show();
+                }
+            }
+
+            jQuery('body').on('click', '#clone-infliction',function(){
+                var clone = jQuery('.js-clone select').clone();
+                clone.removeAttr('style');
+                jQuery('#clone_box').append(clone);
+                jQuery('#clone_box select:last').wrap('<div class="box-infliction"></div>');
+              //jQuery('#clone_box select:last  option:selected').remove();
+                jQuery('#clone_box select:last  :first').remove();
+                jQuery('.box-infliction:last').append('<span class="delete-infliction">-</span>');
+
+                if ( $('body').hasClass('is-touch-device') ){
+                    jQuery('#clone_box select:last').addClass("dropdown");
+                    jQuery('#clone_box select:last').css("width","170");
+                    jQuery('#clone_box select:last').css("padding","10");
+                    jQuery('#clone_box select:last').css("font-size","17px");
+                    jQuery('#clone_box select:last').easyDropDown();
+                }else {
+                    jQuery('#clone_box select:last').chosen({
+                        width: '100%',
+                        disable_search: true
+                    });
+                }
+
+                jQuery('#clone_box select:last').on('change',function(){
+                    ajax_rest();
+                });
+                check_amount_infliction();
+                ajax_rest();
+            });
+
+            jQuery('body').on('click', '.delete-infliction', function(){
+                jQuery(this).parent().remove();
+                check_amount_infliction();
+                ajax_rest();
+            });
+
+
+            var globalTimeoutCalculation;
+
+            function initTimerCalculation() {
+                if (globalTimeoutCalculation) clearTimeout(globalTimeoutCalculation);
+                globalTimeoutCalculation = setTimeout(handlerCalculation, 500);
+            }
+
+            //событие ввода
+            function handlerCalculation() {
+                Mage.Cookies.set('handlerCalculation', 'on');
+                $('.js-icon_loading-indicator').append('<div class="icon icon_loading-indicator"></div>');
+                ajax_rest(1);
+            }
+
+            function init_calculation_update() {
+                $("#calculation").keydown(initTimerCalculation);
+
+                $('.js-calculation-size').on('click', function () {
+                    $('#calculation').val($(this).attr('rel'));
+                    ajax_rest();
+                });
+
+                $("#in_basket").on('click', function () {
+                    ajax_test_product();
+                });
+
+                if ( jQuery('body').hasClass('is-touch-device') ) {
+
+                    jQuery('.d-select__inner').easyDropDown();
+                    jQuery('.d-select__inner').each(function() {
+                        jQuery(this).prop('disabled') ?
+                            jQuery(this).closest('.dropdown').addClass('disabled')
+                            :jQuery(this).closest('.dropdown').removeClass('disabled');
+                    });
+                } else {
+                    jQuery('.d-select__inner').chosen({
+                        width: '100%',
+                        disable_search: true
+                    });
+                }
+
+                jQuery('.js-button-helper-with-scroll-infliction').buttonHelper();
+            }
+
+            $("body").on('change keyup input click','#calc input[name$="qty"]', function () {
+                if (this.value.match(/[^0-9]/g)) {
+                    this.value = this.value.replace(/[^0-9]/g, '');
+                }
+            });
+
+            function getChar(event) {
+                if (event.which == null) {
+                    if (event.keyCode < 32) return null;
+                    return String.fromCharCode(event.keyCode) // IE
+                }
+
+                if (event.which!=0 && event.charCode!=0) {
+                    if (event.which < 32) return null;
+                    return String.fromCharCode(event.which)   // остальные
+                }
+
+                return null; // специальная клавиша
+            }
+
+            function initSelectFotMobile()
+            {
+                if ( jQuery('body').hasClass('is-touch-device') ) {
+                    jQuery('.d-select__inner').easyDropDown('destroy');
+                    jQuery('.d-select__inner').easyDropDown();
+                }
+            }
+
+            function ajax_rest(touch) {
+
+                touch = touch || '0';
+
+                setTimeout(function(){initSelectFotMobile();},1000);
+
+                var qty=$("#calc input[name$='qty']");
+                var min_qty=$('.js-min-count-get-var');
+                if (qty.val()<1) {qty.val(1);}
+
+                var request = $('#calc').serialize();
+
+                $('.js-d-select').find('.d-select__inner').trigger("chosen:updated");
+                $('.js-add-to-cart-popup').addClass("button_gray").attr("disabled", "true");
+                $('#clone-infliction, .delete-infliction').addClass("button-gray").bind('click', function(){ return false; });
+                $.ajax({
+                    url: '<?php echo $this->getUrl('calculate/calculate/recount')."?touch="; ?>'+touch + '&' + request,
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.error) {
+                            alert(data.error);
+                            return false;
+                        }
+
+                        if (data['alert-message'] !='' && data['recommended-remember'])
+                        {
+                                jQuery('.js-min-count-set-var').html(jQuery('.js-min-count-get-var').attr('rel'));
+                                jQuery('#min-count_coment').html('Здравствуйте, меня интересует "' + jQuery('.js-title').html() + '" в тираже ' + jQuery('#calculation').val() + ' шт.');
+                                jQuery('.js-add-min-count').popups('showPopup', jQuery('.js-add-min-count'));
+                        }
+
+                        $('#calculation-params').replaceWith(data['calculation-params']);
+                        $('#calculation-details').replaceWith(data['calculation-details']);
+                        $('#attributes').replaceWith(data['attributes']);
+                        if ($('#child-product-id').val()!=data['child-product-id']){
+                            $('#infliction-block').replaceWith(data['infliction-block']);
+                            ajax_rest();
+                        }else{
+                            $('#infliction-block').replaceWith(data['infliction-block']);
+                        }
+                        $('#child-product-id').val(data['child-product-id']);
+                        $('#calc').attr('action', data['add-to-cart-url']);
+                        $('#product-description').html(data['product-description']);
+
+                        $('#calculation-details .js-roll-up').rollUp();
+                        init_calculation_update();
+                        ajax_get_gallery($('#product-id').val(), data['child-product-id']);
+                        jQuery('.js-button-helper-with-scroll-infliction').buttonHelper();
+                    }
+                });
+            }
+
+            function ajax_add_to_basket() {
+                var request = $("#calc").serialize() + '&isAjax=1';
+                var html = '';
+                $.ajax({
+                    url: $('#calc').attr('action'),
+                    type: 'POST',
+                    dataType: 'json',
+                    data: request,
+                    success: function (data) {
+                        if (data.status == 'ok') {
+                            jQuery('.js-basket-added-popup').popups('showPopup', jQuery('.js-basket-added-popup'));
+
+                            $.getJSON( "<?php  echo $this->getUrl('calculate/calculate/recountbasketwidget') ?>", function( info ) {
+                                html = '<div class="basket_box_right"><a href="<?php echo $this->getUrl('checkout/cart')?>" class="basket basket_full"><div class="basket__text"><div class="basket__text__full vsmall-size lh-sm">' +
+                                info.all_amount + ' руб.' +
+                                '<br/><span class="basket__pseudo-link">' +
+                                'Оформить заказ' +
+                                '</span></div></div></a></div><div class="basket__text basket_box_left clearfix">'+
+                                info.all_count+'</div>';
+                                $('#ajax-cart').html(html);
+                            });
+
+                            jQuery('.js-title-product').text(jQuery('.js-title').text());
+                            jQuery('.js-product-price').html(jQuery('.js-total-price').html());
+                            jQuery('.js-rate-count').text(jQuery('#calculation').val());
+                            jQuery('.js-price').html(jQuery('.js-amount-price').html());
+                            jQuery('.js-product-image').attr('src', jQuery('.js-image-window').attr('src'));
+                        } else {
+                            alert(data.message)
+                        }
+                    }
+                });
+            }
+
+            function ajax_test_product() {
+                $.ajax({
+                    url: '<?php echo $this->getUrl('calculate/calculate/testProduct')?>'
+                    + '?productId=' + $('#child-product-id').val() + '&sku=' + $('#sku').text(),
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.status == true) {
+                            $('.js-add-to-cart-popup-alert').popups('showPopup', $('.js-add-to-cart-popup-alert'));
+                            $('.js-add-to-cart-alert').on('click', function () {
+                                $('.js-add-to-cart-popup-alert').popups('hidePopup', $('.js-add-to-cart-popup-alert'));
+                                ajax_add_to_basket();
+                            });
+                        } else {
+                            ajax_add_to_basket();
+                        }
+                    }
+                });
+            }
+
+            function ajax_get_gallery(id_product, id_product_child) {
+                $.ajax({
+                    url: '<?php echo $this->getUrl('prodgal/prodgall/getGallery')."?id_product="?>' + id_product + '&id_product_child=' + id_product_child,
+                    dataType: "json",
+                    success: function (data) {
+                        $('.ajax_load_image_block').empty();
+                        $('.ajax_load_image_block').html(data.html);
+                        window.initGelleryGlobal();
+                    }
+                });
+            }
+
+            $('body').on('change', '.js-check-on',function () {
+                ajax_rest();
+            });
+
+            //событие вызывается при загрузки страницы - связь prototype и jquery /app/design/frontend/base/default/template/easylife_switcher/catalog/product/view/type/configurable/config.phtml
+            $('body').on('change','.js_select_update', function () {
+                ajax_rest();
+            });
+
+            $('body').on('change','.nanesenie', function () {
+                ajax_rest();
+            });
+
+            $('#calc').on("keydown", function (event) {
+                if (event.which == '13') {
+                    ajax_rest();
+                    event.preventDefault();
+                }
+            });
+
+            jQuery('body').on('click','.js_cheked_nan', function (event) {
+                event.preventDefault();
+                var id_nan = jQuery('.js_cheked_nan').attr('nan_id');
+                jQuery("#nan_" + id_nan).prop('selected', true);
+
+                var selects = jQuery('.js-d-select').find('.d-select__inner');
+
+                if ( jQuery('body').hasClass('is-touch-device') ) {
+                    selects.trigger('change');
+                } else {
+                    selects.trigger("chosen:updated");
+                }
+
+                ajax_rest();
+            });
+        })(jQuery);
+    </script>
+<?php }?>

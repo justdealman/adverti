@@ -1,0 +1,38 @@
+<?php /** @var Adverti_Sphinx_Block_Sphinx $this */ ?>
+
+<?php if ($this->getCountSearch()): ?>
+    <div class="cols-4">
+    <?php foreach($this->getSearchResult() as $product){ ?>
+                <div class="cols-4__item">
+                    <a href="<?php echo $product->getProductUrl() ?>" class="promo-product promo-product_adaptive-slider promo-product_full-w">
+                        <?php if($product->getData('recommended_price_old')) {?><div class="discount-flag">скидка</div><?php }?>
+                        <?php if($product->getData('archive')) {?><div class="archive-flag">Архивный товар</div><?php }?>
+                        <div class="promo-product__image-w">
+                            <img class="promo-product__image" src="<?php
+                            echo $this->helper('catalog/image')->init($product, 'small_image')->resize(210)->setQuality(100); ?>" alt="<?php
+                            echo $this->stripTags($this->getImageLabel($product, 'small_image'), null, true) ?>"
+                                 alt=""/>
+                        </div>
+                        <div class="promo-product__title-w promo-product__title-w_hidden-1-col">
+                            <div class="promo-product__title"><?php echo $this->escapeHtml($product->getName()) ?></div>
+                        </div>
+                        <div class="promo-product__price">
+                            <div class="promo-product__price__price"><?php echo number_format($product->getData('recommended_price'), 2, ',', ' ');?>&nbsp;руб.</div>
+                        </div>
+                        <div class="promo-product__additional">при тираже&nbsp;<?php echo number_format($product->getData('recommended_count'), 0, ',', ' ') ?>&nbsp;шт.</div>
+                        <div class="promo-product__sku"><?php echo $product->getSku() ?></div>
+                    </a>
+                </div>
+    <? } ?>
+    </div>
+
+<?php else: ?>
+    <p class="note-msg">
+        <?php echo ($this->getNoResultText()) ? $this->getNoResultText() : $this->__('Your search returns no results.') ?>
+        <?php if ($messages = $this->getNoteMessages()): ?>
+            <?php foreach ($messages as $message): ?>
+                <br/><?php echo $message ?>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </p>
+<?php endif; ?>

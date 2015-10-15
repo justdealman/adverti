@@ -1,0 +1,23 @@
+<?php
+/** @var Adverti_Adverti_Block_Categories $this */
+?>
+<div id="removeprint1" class="leftnavi">
+    <?php
+    $tree = $this->getCategoriesTree();
+    if (isset($tree[Mage::app()->getStore()->getRootCategoryId()])) :?>
+    <?php endif ?>
+    <?php foreach ($tree[Mage::app()->getStore()->getRootCategoryId()]['children'] as $item):
+        /** @var Mage_Catalog_Model_Category $category */
+        $category = $item['category']?>
+        <h3 class="title2 title2_pr">
+            <?php $url_to_main = Mage::getBaseUrl().$category->getUrlKey().'/'; ?>
+            <a href="<?php echo  $url_to_main; ?>" class="titlelink"><?php echo $category->getName() ?></a></h3>
+        <ol type="square" class="prodlist2 prodlist2_pr">
+            <?php foreach ($item['children'] as $_item):
+            $subCategory = $_item['category']?>
+            <li class="prodname2"><a href="<?php echo $subCategory->getUrl() ?>" class="itemlink"><?php echo $subCategory->getName() ?></a>
+                <?php endforeach ?>
+        </ol>
+    <?php endforeach ?>
+    <img src="/skin/frontend/adverti/default/images/i/1x1.gif" class="leftimg">
+</div>

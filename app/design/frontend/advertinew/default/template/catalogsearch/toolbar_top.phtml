@@ -1,0 +1,54 @@
+<?php
+/** @var Mage_Core_Block_Template $this */
+/* @var $catalogSearchHelper Mage_Catalogsearch_Helper_Data */
+$catalogSearchHelper = $this->helper('catalogsearch');
+/** @var Mage_Catalog_Block_Product_List $blockProductList */
+$blockProductList = null;
+if (($block = $this->getParentBlock()->getChild('search.result'))) {
+    $blockProductList = $block->getChild('search_result_list');
+}
+?>
+    <style>
+        .underthemenu2 .form {
+            display: none;
+        }
+    </style>
+    <!--[if IE 8]>
+    <style>
+        .search-line__text {
+            padding-top: 7px;
+        }
+
+        .search-line__submit {
+            position: relative;
+            left: -3px;
+        }
+
+        .paginator__pages__item_ie8last {
+            border-right: 1px solid #f3f3f3 !important;
+        }
+    </style>
+    <![endif]-->
+
+    <h1 class="hdr2">Поиск</h1>
+
+    <form class="search-line" method="get" id="search_searchcatalog_form" action="<?php
+    echo $catalogSearchHelper->getResultUrl() ?>">
+        <div class="search-line__left">
+            <input id="search" type="text" name="<?php echo $catalogSearchHelper->getQueryParamName() ?>" value="<?php
+            echo $catalogSearchHelper->getEscapedQueryText() ?>" class="search-line__text"/>
+        </div>
+        <div class="search-line__right">
+            <input type="submit" class="search-line__submit" value=""/>
+        </div>
+    </form>
+    <script type="text/javascript">
+        //<![CDATA[
+        var searchForm = new Varien.searchForm('search_mini_form', 'search', '<?php echo $this->__('Search entire store here...') ?>');
+        searchForm.initAutocomplete('<?php echo $catalogSearchHelper->getSuggestUrl() ?>', 'search_autocomplete');
+        //]]>
+    </script>
+<?php if ($blockProductList->getLoadedProductCollection()->getSize()) : ?>
+    <div class="hdr2">Найдено <span
+            class="gray normal">(<?php echo $blockProductList->getLoadedProductCollection()->getSize() ?>)</span></div>
+<?php endif ?>

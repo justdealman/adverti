@@ -1,0 +1,237 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2014 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Category layered navigation
+ *
+ * @see Mage_Catalog_Block_Layer_View
+ */
+?>
+<?php if($this->canShowBlock()): ?>
+<a name="filter-block"></a>
+<div class="block block-layered-nav lets-filter-block js-lets-filter-block">
+    <div class="block-content">
+        <?php if ($this->getLayer()->getState()->getFilters() || Mage::app()->getRequest()->getParam('rate_value')): ?>
+            <div class="actions js-action">
+                <img src="<?php echo $this->getSkinUrl().'/images/theme/default/filter_icon.png';?>" alt="" />
+                <a href="<?php echo Mage::getBaseUrl().Mage::registry('current_category')->getUrlPath();?>">Сбросить фильтр</a>
+            </div>
+        <?php endif; ?>
+        <?php echo $this->getStateHtml() ?>
+        <dl id="narrow-by-list">
+            <dt>Тираж</dt>
+            <dd data-option-name="Тираж">
+                    <input name="rate" value="" type="text" min="1" max="100000" id="filt_rate_value" class="rate_value js-rate_value">
+            </dd>
+        </dl>
+        <?php if($this->canShowOptions()): ?>
+                <?php $_filters = $this->getFilters() ?>
+                <?php foreach ($_filters as $_filter): ?>
+                <?php if($_filter->getItemsCount() && ($this->__($_filter->getName()!="Себестоимость"))): ?>
+                     <dl id="narrow-by-list">
+                        <dt><?php echo $this->__($_filter->getName()) ?></dt>
+                        <dd data-option-name="<?php echo $this->__($_filter->getName()) ?>"><?php echo $_filter->getHtml() ?></dd>
+                     </dl>
+                <?php endif; ?>
+                <?php endforeach; ?>
+        <?php endif; ?>
+        <div class="do-lets-filter-wrap js-do-lets-filter-wrap">
+            <input class="js-do-lets-filter do-lets-filter button" type="button" value="Показать">
+        </div>
+    </div>
+</div>
+<input class="js-do-lets-filter-moved do-lets-filter-moved button" type="button" value="Показать">
+
+    <script type="text/javascript">
+
+        //показываем фильтр при клике на чек
+        jQuery('.js-filter-checkbox').on('change', function(e){
+            jQuery('.do-lets-filter-moved').show();
+            jQuery('.js-lets-filter-col1').css('margin-bottom','-35px');
+        });
+
+        //проверяем что ввел пользователь в поле тираж
+        var globalTimeoutRate;
+
+        function initTimerRate(e) {
+            if (globalTimeoutRate) clearTimeout(globalTimeoutRate);
+            globalTimeoutRate = setTimeout(handlerRate, 500);
+        }
+        //событие ввода
+        function handlerRate() {
+            var  rate_val =  jQuery(".js-rate_value");
+            if (rate_val.val()<1 || rate_val.val()>100000)
+            {
+                var current_rate_value = getUrlParameter('rate_value');
+                rate_val.val(current_rate_value);
+                jQuery('.js-min-rate-alert').popups('showPopup', jQuery('.js-min-rate-alert'));
+            }else {
+                jQuery('.do-lets-filter-moved').show();
+                jQuery('.js-lets-filter-col1').css('margin-bottom', '-35px');
+            }
+        }
+        jQuery(".js-rate_value").keyup(function(){
+            if (this.value.match(/[^0-9]/g)) {
+                this.value = this.value.replace(/[^0-9]/g, '');
+            }
+            if (!this.value)
+            {
+                return;
+            }
+            initTimerRate();
+        });
+
+        //перемещаем кнопку за курсором
+        jQuery('.js-lets-filter-block').mousemove(function(e){
+            var y = e.pageY;
+            var x =  jQuery('.js-lets-filter-block').offset().left+100;
+            jQuery('.js-do-lets-filter-moved').offset({top:y-14, left:x});
+        });
+
+        //при дивжении курсора за пределами фильтра прячем кнопку
+        jQuery('.js-lets-filter-col1').mouseleave(function() {
+            jQuery('.do-lets-filter-moved').hide();
+            jQuery('.js-lets-filter-col1').css('margin-bottom','0px');
+        });
+        jQuery('.js-do-lets-filter-wrap, .js-action').hover(function() {
+            jQuery('.do-lets-filter-moved').hide();
+            jQuery('.js-lets-filter-col1').css('margin-bottom','0px');
+        });
+
+        //применяем фильтр
+        function apply_filter_params(cat){
+
+            cat = cat || '<?php echo $this->getRequest()->getParam('cat')?>';
+
+            var arrayValues = [];
+            jQuery('.js-lets-filter-block input[type=checkbox]').each( function() {
+                if( jQuery(this).is(':checked') ) {
+                    if(arrayValues[jQuery(this).attr('name')]!=undefined){
+                        arrayValues[jQuery(this).attr('name')]=arrayValues[jQuery(this).attr('name')]+','+jQuery(this).val();
+                    }else{
+                        arrayValues[jQuery(this).attr('name')]=jQuery(this).val();
+                    }
+                }
+            });
+
+            //добавляем тираж в параметры фильтра
+            var rate_value = jQuery('.js-rate_value');
+            if (rate_value.val() > 0){
+                arrayValues['rate_value'] = rate_value.val();
+            };
+
+            var filterParams = "<?php echo Mage::getBaseUrl().Mage::registry('current_category')->getUrlPath();?>?";
+            for(var key in arrayValues)
+            {
+                if(key == 'each' ) break;
+                filterParams+=key + '=' + arrayValues[key]+'&';
+            }
+
+            //console.log(cat);
+            filterParams+='cat=' + cat+'&';
+
+            //console.log( filterParams );
+            location.href = filterParams.slice(0,-1)+'#filter-block';
+        }
+        jQuery('.js-filt-cat').click(function() {
+            setTimeout(function(){jQuery('.lets-filter-block').children().bind('click', function(){ return false; });},0);
+            jQuery('.js-filt-cat').unbind('click');
+            apply_filter_params(jQuery(this).attr('data-cat'));
+        });
+        jQuery( ".js-do-lets-filter, .js-do-lets-filter-moved" ).click(function() {
+            apply_filter_params();
+        });
+
+
+        //разворачиваем/сворачиваем значения атрибутов
+        function get_visable_checkbox(){
+            jQuery('.js-lets-filter-block dd').each(function(){
+                jQuery(this).find('.js-checkbox-block').each(function(index){
+                        if (index > 4) {
+                            if (Mage.Cookies.get(jQuery(this).parent().attr('data-option-name'))!=1) {
+                                jQuery(this).addClass('hidden-option');
+                                jQuery(this).parent().find('.js-show-all-options').show();
+                                jQuery(this).parent().find('.js-hide-all-options').hide();
+                            }else{
+                                jQuery(this).removeClass('hidden-option');
+                                jQuery(this).parent().find('.js-hide-all-options').show();
+                                jQuery(this).parent().find('.js-show-all-options').hide();
+                            }
+                        }
+                });
+            });
+        }
+
+        var getUrlParameter = function getUrlParameter(sParam) {
+            var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+                sURLVariables = sPageURL.split('&'),
+                sParameterName,
+                i;
+
+            for (i = 0; i < sURLVariables.length; i++) {
+                sParameterName = sURLVariables[i].split('=');
+
+                if (sParameterName[0] === sParam) {
+                    return sParameterName[1] === undefined ? true : sParameterName[1];
+                }
+            }
+        };
+
+        jQuery(document).ready(function(){
+            var rate_value_block = jQuery('.js-rate_value');
+            var rate_value_value = getUrlParameter('rate_value');
+            //console.log(rate_value_value);
+            //навсякий случай если подвел js или вбили url вручную
+            if (rate_value_value != undefined && (isNaN(rate_value_value) || rate_value_value<1 || rate_value_value>100000)){
+                rate_value_value = 25;
+            }
+            rate_value_block.val(rate_value_value);
+
+            get_visable_checkbox();
+            jQuery('.js-show-all-options').on('click', function(){
+                jQuery('.do-lets-filter-moved').hide();
+                Mage.Cookies.set(jQuery(this).parent().attr('data-option-name'), '1');
+                get_visable_checkbox();
+            });
+            jQuery('.js-hide-all-options').on('click', function(){
+                jQuery('.do-lets-filter-moved').hide();
+                Mage.Cookies.set(jQuery(this).parent().attr('data-option-name'), '0');
+                get_visable_checkbox();
+            });
+
+            jQuery('.js-x-closer-min-rate-alert').on('click', function( event ) {
+                event.preventDefault();
+                jQuery('.js-min-rate-alert').popups('hidePopup', jQuery('.js-min-rate-alert'));
+            });
+        });
+    </script>
+<?php endif; ?>
+
+<div class="d-popup js-min-rate-alert js-show-bg js-close-bg-click">
+    <a href="#" class="x-closer x-closer_corner js-x-closer-min-rate-alert"></a>
+    <p>Вы вели не допустимое значение тиража, введите значение в поле тираж в диапазоне от 1 до 100 000</p>
+</div>

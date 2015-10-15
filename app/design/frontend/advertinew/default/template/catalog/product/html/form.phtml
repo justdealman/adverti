@@ -1,0 +1,45 @@
+<div id="removeprint5">
+    <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+    <form action="<?php echo $this->getUrl('adverti/order/send') ?>" class="order-form js-order-form" method="post">
+        <h4>Форма запроса</h4>
+        <dl>
+            <dt></dt>
+            <dd>
+                <label style="color: #6A6A6A;">
+                    <input type="radio" name="action" value="tellme" checked="checked"> Проконсультироваться
+                </label>
+                <label style="color: #6A6A6A;">
+                    <input type="radio" name="action" value="order"> Заказать этот товар
+                </label>
+            </dd>
+            <dt><!--[if IE 8]><label for="email_phone">Телефон или почта</label><![endif]--></dt>
+            <dd>
+                <input type="text" name="email_phone" id="email_phone" class="input-text"
+                       placeholder="Телефон или почта">
+            </dd>
+            <dt><!--[if IE 8]><label for="name">Имя</label><![endif]--></dt>
+            <dd>
+                <input type="text" name="name" id="name" class="input-text" placeholder="Имя">
+            </dd>
+            <dt></dt>
+            <dt><!--[if IE 8]><label for="note">Примечание</label><![endif]--></dt>
+            <dd>
+                <textarea name="note" id="note" placeholder="Примечание" class="textarea"></textarea>
+            </dd>
+            <dt></dt>
+            <dd>
+                <p class="nanes">
+                    Наш менеджер свяжется с вами в течение часа в рабочее время
+                </p>
+            </dd>
+            <dt></dt>
+            <dd>
+                <?php if (Mage::registry('current_product')): ?>
+                    <input type="hidden" name="product" value="<?php
+                    echo Mage::registry('current_product')->getId()?>"/>
+                <?php endif ?>
+                <input type="submit" value="Отправить" class="button">
+            </dd>
+        </dl>
+    </form>
+</div>

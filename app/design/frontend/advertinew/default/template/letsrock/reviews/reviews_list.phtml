@@ -1,0 +1,97 @@
+<style>
+    ul.simplePagerNav{
+        list-style: none;
+    }
+    ul.simplePagerNav li{
+        list-style: none;
+        display:block;
+        float: left;
+        padding: 10px;
+        margin-bottom: 10px;
+        font-size:14px;
+        border-radius: 3px;
+    }
+    ul.simplePagerNav li:before{
+        background: none;
+        content: '';
+        position: absolute;
+        width: 0px;
+        height: 0px;
+        border-radius: 0;
+        left: 0;
+        top: 0;
+    }
+    ul.simplePagerNav li a{
+        border: none;
+        background: none;
+    }
+
+    li.currentPage {
+        background: #ed731c;
+    }
+    a{
+        text-decoration: none!important;
+    }
+    ul.simplePagerNav li.currentPage a {
+        color: #fff;
+    }
+    ul.simplePagerNav li:after{
+        clear: both;
+    }
+</style>
+
+<?php
+    $reviews = $this->getReviewsList();
+?>
+<div class="js-pagination-review-wrap">
+    <?php
+        if ($reviews['totalRecords'] > 0):
+            foreach ($reviews['items'] as $review):?>
+                <div class="simplePagerPage" style="display:none">
+                    <div class="paragraph-title">
+                        <h3 class="bold"><?php echo $review['name']?>, <?php echo $review['company']?></h3>
+                    </div>
+                    <p>
+                        <?php echo $review['msg']?>
+                    </p>
+                </div>
+            <?php
+            endforeach;
+        endif;
+    ?>
+</div>
+
+<div class="clearfix"></div>
+<form action="<?php echo Mage::getUrl('adverti_reviews/index/add') ?>" method="post" class="js-validate-form-review">
+    <input type="text" name="fio" class="hidden"/><?php //защита от спам ботов?>
+    <input type="text" name="secondName" value="http://" class="hidden"/><?php //защита от спам ботов?>
+    <div class="title-vsm bold">Оставить отзыв</div>
+    <div class="d-form-item">
+        <label for="review-contact" class="d-form-item__label">Телефон или почта <span
+                class="required-input">*</span></label>
+        <input class="d-form-item__text" type="text" name="contact" id="review-contact " required/>
+    </div>
+    <div class="d-form-item">
+        <label for="review-contact-person" class="d-form-item__label">Контактное лицо <span
+                class="required-input">*</span></label>
+        <input class="d-form-item__text" type="text" name="name" id="review-contact-person"/>
+    </div>
+    <div class="d-form-item">
+        <label for="review-company" class="d-form-item__label">Компания <span class="required-input">*</span></label>
+        <input class="d-form-item__text" type="text" name="company" id="review-company"/>
+    </div>
+    <div class="d-form-item">
+        <label for="review-msg" class="d-form-item__label">Сообщение <span class="required-input">*</span></label>
+        <textarea name="msg" class="d-form-item__text" id="review-msg" required></textarea>
+    </div>
+    <input type="hidden" name="back_url" value="<?php echo $_SERVER['REQUEST_URI'] ?>">
+    <input class="button button_mb-sm button_mr-sm" type="submit" value="Отправить" style="width: 100%;"/>
+    <br class="d-popup__br-1-2-show"/>
+</form>
+
+<script type="text/javascript" src="<?php  echo Mage::getBaseUrl();?>js/jquery.quick.pagination.js"></script>
+<script>
+    jQuery( document ).ready(function() {
+        jQuery("div.js-pagination-review-wrap").quickPager({pageSize:"10"});
+    });
+</script>

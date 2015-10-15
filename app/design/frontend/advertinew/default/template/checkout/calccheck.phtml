@@ -1,0 +1,242 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: naumov
+ * Date: 21.10.14
+ * Time: 10:26
+ */
+/** @var Adverti_Calculate_Block_Checkout_Cart $this */
+?>
+<form action="#" method="post" id="calc_basket">
+    <table class="b-table">
+        <thead>
+        <tr>
+            <td class="b-table_1-2-hide">Состав заказа</td>
+            <td class="b-table_1-2-hide">Услуги</td>
+            <td class="b-table_1-2-hide">Цена за шт.</td>
+            <td class="b-table_1-2-hide">Цена за услуги</td>
+            <td class="b-table_1-2-hide">Цена за изделие</td>
+            <td class="b-table_1-2-hide">Тираж шт.</td>
+            <td class="b-table_1-2-hide" colspan="2">Цена за тираж</td>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($this->getItems() as $item): ?>
+            <tr class="<?php if ($item['showRecommendedRemember']):?>check-with-manager-in-cart<?php endif?>">
+                <td>
+                    <a href="<?php echo Mage::helper('calculate')->getProductUrl($item['product']['id']); ?>"
+                       class="b-table__product clearfix">
+                        <span class="b-table__product__left">
+                            <img src="<?php echo $this->helper('catalog/image')->init(
+                                Mage::helper('prodgal')->getMediaGalleryProdgal($item['product']['id'])->getProduct(),
+                                'thumbnail'
+                            )->setQuality(100); ?>" alt="">
+                        </span>
+                        <span class="b-table__product__right">
+                            <span class="b-table__product__right__link">
+                                <?php echo $item['product']['name']; ?><br>
+                                Артикул: <?php echo $item['product']['sku']; ?>
+                            </span><br>
+                            <span class="default-color">
+                                <?php if($item['product']['options']):?>
+                                    <?php foreach ($item['product']['options'] as $option): ?>
+                                        <?php echo $option ?><br>
+                                    <?php endforeach; ?>
+                                <?php endif;?>
+                            </span>
+                        </span>
+                    </a>
+                </td>
+                <td>
+                    <br class="b-table_1-2-show">
+                    <?php foreach ($item['services']['names'] as $name): ?>
+                        <?php echo $name; ?><br>
+                    <?php endforeach; ?>
+                </td>
+                <td class="b-table__price b-table_1-2-hide">
+                    <?php if(isset($item['percent'])){?>
+                        <span class="calculate_oldprice_bakset"><?php echo number_format($item['product']['price']/(100-$item['percent'])*100, 2, ',', ' '); ?>&nbsp;руб.</span>
+                        <br/>
+                    <?php }?>
+                    <?php echo number_format($item['product']['price'], 2, ',', ' '); ?>&nbsp;руб.
+                </td>
+                <td class="b-table__price b-table_1-2-hide">
+                    <?php if(isset($item['percent']) && $item['services']['price']>0 && ($item['service_is_enable'])){?>
+                        <span class="calculate_oldprice_bakset"><?php echo number_format($item['services']['price']/(100-$item['percent'])*100, 2, ',', ' '); ?>&nbsp;руб.</span>
+                        <br/>
+                    <?php }?>
+                    <?php echo number_format($item['services']['price'], 2, ',', ' '); ?>&nbsp;руб.
+                </td>
+                <td class="b-table__price b-table_1-2-hide">
+                    <?php if(isset($item['percent']) && ($item['service_is_enable'])){?>
+                        <span class="calculate_oldprice_bakset"><?php echo number_format($item['total']['price']/(100-$item['percent'])*100, 2, ',', ' '); ?>&nbsp;руб.</span>
+                        <br/>
+                    <?php }?>
+                    <?php echo number_format($item['total']['price'], 2, ',', ' '); ?>&nbsp;руб.
+                </td>
+                <td>
+                    <label><input class="b-table__input js-count-sum" name="qty[<?php echo $item['item']['id']; ?>]"
+                                  type="text" value="<?php echo $item['count']; ?>"></label>
+                </td>
+                <td class="b-table__price">
+                    <?php if(isset($item['percent'])){?>
+                        <span class="calculate_oldprice_bakset">
+                        <?php
+                        if ($item['service_is_enable']) {
+                            $total = $item['total']['amount']/(100-$item['percent'])*100;
+                        }else{
+                            $total = $item['product']['amount']/(100- $item['percent'])*100 + $item['services']['amount'];
+                        }
+                        echo number_format($total, 2, ',', ' ');
+                        ?>
+                            &nbsp;руб.
+                    </span>
+                        <br/>
+                    <?php }?>
+                    <?php echo number_format($item['total']['amount'], 2, ',', ' '); ?>&nbsp;руб.
+                </td>
+                <td>
+                    <a class="b-table_1-2-hide x-closer x-closer_top"
+                       href="<?php echo $this->getUrl('checkout/cart/delete', array('id' => $item['item']['id'])); ?>"></a>
+                    <a class="b-table_1-2-show"
+                       href="<?php echo $this->getUrl('checkout/cart/delete', array('id' => $item['item']['id'])); ?>">
+                        Убрать из корзины
+                    </a>
+                </td>
+            </tr>
+            <?php if ($item['showRecommendedRemember']):?>
+                <tr>
+                    <td colspan="8" class="check-with-manager-in-cart">
+                            Уточняйте у менеджера возможность изготовления такого тиража
+                            (минимальный тираж <?php echo $item['product']['minQuantity']; ?> шт.)
+                    </td>
+                </tr>
+            <?php endif;?>
+        <?php endforeach; ?>
+        </tbody>
+        <tfoot>
+        <tr>
+            <td class="b-table_1-2-hide">
+                <a href="<?php echo $this->getUrl('docxupload/docxupload/saveDocx') ?>" class="dotted bbottom-r">
+                    <div class="icon icon_docx"></div>
+                    <span class="link-inner">Сохранить заказ в файле</span>
+                </a>
+            </td>
+            <td colspan="4" class="b-table_1-2-hide">
+                <div class="button-helper js-show-basket-link print-hide in-block">
+                    <a href="#" class="button-helper__button button-helper__button_simple-link dotted js-link-basket">
+                        Ссылка на эту корзину
+                    </a>
+                    <div class="button-helper__text button-helper__text_center_width vsmall-size lh-sm">
+                        <div class="button-helper__text__inner">
+                            <p>
+                                По этой ссылке сохранена собранная вами корзина.
+                                Цены обновятся автоматически при каждом обращении к ней.
+                                Если вы изменили содержание корзины, то необходимо скопировать новую ссылку.
+                            </p>
+                            <label>
+                                <input class="b-table__input b-table__input_link" id="link_basket" type="text"
+                                       value="Ссылка на страницу">
+                            </label>
+                            <p>
+                                При переходе по ссылке в корзине будут эти товары:
+                            </p>
+                            <br />
+                            <?php foreach ($this->getItems() as $item): ?>
+                                <p>
+                                    <b><?php echo $item['product']['name']; ?>:</b>
+                                    <?php echo $item['count']; ?> шт.
+                                </p>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    jQuery(function() {
+                        jQuery('.js-show-basket-link').buttonHelper();
+                    });
+                </script>
+                <script>
+                    jQuery(".js-link-basket").on('click',function(){
+                        jQuery.ajax({
+                            url: '<?php echo $this->getUrl('storecart/link/getLink')?>',
+                            dataType: "json",
+                            success:function(data){
+                                if(data.error==1){
+                                    alert(data.message);
+                                } else {
+                                    jQuery('#link_basket').val(data.url).select();
+                                }
+                            }
+
+                        })
+                    });
+                </script>
+            </td>
+            <td class="default-size default-lh">
+                <span class="b-table_1-2-show">Итого тираж шт.</span><?php echo $this->getAllCount(); ?>&nbsp;шт.
+            </td>
+            <td colspan="2" class="title-vsm bold">
+                <span class="b-table_1-2-show">Итого цена за тираж:</span>
+                <span class="nowrap">
+                    <?php echo number_format($this->getAllAmount(), 2, ',', ' '); ?>&nbsp;руб.
+                </span>
+            </td>
+        </tr>
+        </tfoot>
+    </table>
+
+    <style>
+
+    </style>
+
+    <div class="basket_bottom_box print-hide">
+        <div class="left">
+            <a href="<?php echo $this->getUrl('calculate/calculate/clearbasket')?>" class="dotted">Очистить корзину</a>
+        </div>
+        <div class="right">
+            <input class="button button_gray button_mb-sm" type="button" value="Пересчитать" onclick="javascript:void(0);" />
+            <input class="button js-proccessing" type="submit" value="Оформить заказ">
+        </div>
+        <div class="clr"></div>
+    </div>
+
+    <div class="print-hide hint-card-desc">
+        <?php echo Mage::app()->getLayout()->createBlock('cms/block')->setBlockId('basket_text_block')->toHtml();?>
+    </div>
+
+    <div style="display: none" class="js-alert-message"><?php echo $this->getData('alert_message'); ?></div>
+    <script>
+        (function ($) {
+            init();
+
+            function init() {
+                $('.js-count-sum').on('change', function () {
+                    request();
+                    $('.js-show-basket-link').html('<div class="icon icon_loading"></div>');
+                });
+            }
+
+            var requestFlag = false;
+
+            function request() {
+                if (requestFlag == true) return;
+                requestFlag = true;
+
+                $.ajax({
+                    url: '/calculate/calculate/recountBasket',
+                    data: $('#calc_basket').serialize(),
+                    dataType: 'json',
+                    success: function (data) {
+                        $('#calc_basket').replaceWith(data.basket);
+                        init();
+                        if ('' != $('.js-alert-message').html()) {
+                            alert($('.js-alert-message').html());
+                            $('.js-alert-message').html('');
+                        }
+                    }
+                });
+            }
+        })(jQuery)
+    </script>
+</form>

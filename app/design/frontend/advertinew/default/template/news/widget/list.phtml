@@ -1,0 +1,17 @@
+<h2>Новости</h2>
+
+<div class="cols-4">
+    <?php foreach($this->getNews() as $news):?>
+
+
+    <div class="cols-4__item">
+        <div class="news__item__title"><a href="<?php echo $news->getUrl() ?>"><?php echo $news->getTitle() ?></a></div>
+        <div class="news__item__title"><?php echo $news->getShortContent() ?></div>
+        <div class="news__item__date">
+            <?php echo DateTime::createFromFormat('Y-m-d H:i:s', $news->getNewsTime())->format('d.m.Y'); ?>
+        </div>
+    </div>
+    <?php endforeach ?>
+</div>
+<a href="<?php echo Mage::getBaseUrl() ?>news/">Просмотреть все новости</a>
+<hr class="hr" />

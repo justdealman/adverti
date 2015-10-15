@@ -1,0 +1,39 @@
+<?php
+   /** @var Mage_Catalog_Block_Product_List_Related $this */
+?>
+<div class="d-popup d-popup_wider-max d-popup_p-lr js-basket-added-popup js-show-bg js-close-bg-click">
+    <a href="#" class="x-closer x-closer_corner js-x-closer-order-popup"></a>
+    <div>
+        <div class="title-vsm bold">Тираж успешно добавлен в корзину</div>
+        <div class="product-short">
+            <div class="product-short__left">
+                <div class="product-short__image-w">
+                    <img class="product-short__image js-product-image">
+                </div>
+            </div>
+            <div class="product-short__right">
+                <div class="specifications specifications_mb-b">
+                    <div class="specifications__title js-title-product"></div>
+                    <div class="specifications__item">
+                        <span class="gray">Цена за штуку:</span> <span class="blue js-product-price"></span>&nbsp;руб.
+                    </div>
+                    <div class="specifications__item">
+                        <span class="gray">Тираж:</span> <span class="blue js-rate-count"></span>&nbsp;шт.
+                    </div>
+                    <div class="specifications__item">
+                        <span class="gray">Итого за тираж:</span> <span class="blue js-price"></span>&nbsp;руб.
+                    </div>
+                </div>
+
+                <input class="button button_mb-sm button_mr-sm js-go-to-basket" type="button" value="Оформить заказ">
+                <br class="d-popup__br-1-2-show">
+                <a href="#" class="dotted js-order-popup-closer">Вернуться в каталог</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="application/javascript">
+    jQuery('.js-go-to-basket').on('click',function(){
+        window.location.href ='/checkout/cart/';
+    });
+</script>

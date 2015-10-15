@@ -1,0 +1,13 @@
+<?php
+/** @var Mage_Core_Controller_Request_Http $request */
+$request = $this->getRequest();
+$params = $request->getParams();
+$page = trim($params['page'],'/');
+?>
+<script>
+    window.onload = function () {
+        yaCounter6853483 = new Ya.Metrika({id:6853483});
+        yaCounter6853483.reachGoal(<?php if($params['action']=='order'){ echo "'ZakazTovar'"; }else{ echo "'Spravka'"; } ?>);
+        ga('send','event','Zakaz',<?php if($params['action']=='order'){ echo "'ZakazTovar'"; }else{ echo "'Spravka'"; } ?>,'<?php echo $page ?>');
+    };
+</script>

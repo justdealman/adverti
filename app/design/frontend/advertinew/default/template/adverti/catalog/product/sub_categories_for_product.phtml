@@ -1,0 +1,12 @@
+<?php
+    $colection = $this->getSubCategoriesForProduct();
+?>
+<?php if(count($colection)>1):?>
+	<div class="sub-categories-for-product-sorted">
+		<div>
+            <?php foreach($colection as $category):?>
+                <p><a href="<?php echo $category['url_path']?>"><span><?php echo $category['name']?></span></a></p>
+            <?endforeach?>
+		</div>
+	</div>
+<?php endif;?>

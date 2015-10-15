@@ -1,0 +1,115 @@
+<?php
+/** @var Letsrock_PromoTabs_Block_Display $this */
+$tabs = $this->getTabs();
+?>
+
+<div class="adv-slider">
+    <div class="core">
+        <?php $i=0;?>
+        <?php foreach($tabs as $tab) {?>
+        <div class="tab" data-tab="<?php $i++;echo $i?>">
+            <h5><?php echo $tab->getTitle();?></h5>
+            <?php if($tab->getLink() && $tab->getLabelLink()){?>
+                <p class="more"><a href="<?php echo $tab->getLink()?>"><?php echo $tab->getLabelLink()?> &raquo;</a></p>
+            <?php }?>
+
+            <?php
+            switch ($tab->getType()) {
+                case "tab_text":?>
+
+                        <div class="info-text">
+                            <?php echo $tab->getContent();?>
+                        </div>
+
+                    <?php
+                    break;
+                case "tab_products":?>
+
+
+                    <div class="products">
+                        <ul>
+
+                            <?php foreach($this->getProducts($tab->getContent()) as $product) { ?>
+                                <?php
+                                    Mage::helper('calculate')->isDiscounted($product);
+                                ?>
+
+                                <li>
+                                    <a href="<?php echo $product->getUrlKey().'.html' ?>">
+                                        <?php if($product->getData('recommended_price_old')) {?><div class="discount-flag">скидка</div><?php }?>
+                                        <?php if($product->getData('archive')) {?><div class="archive-flag">Архивный товар</div><?php }?>
+                                        <div>
+                                            <img src="<?php  echo $this->helper('catalog/image')->init($product, 'small_image')->resize(210)->setQuality(100); ?>" alt="">
+                                        </div>
+                                        <h6><span><?php echo $product->getName() ?></span></h6>
+                                        <p>
+                                            <?php if($product->getData('recommended_price_old')) {?>
+                                                <span class="catalog_oldprice"><?php echo number_format($product->getData('recommended_price_old'), 2, ',', ' ');?></span>
+                                            <?php }?>
+                                            <?php echo number_format($product->getData('recommended_price'), 2, ',', ' ');?>&nbsp;руб.
+                                        </p>
+                                        <span class="more"></span>
+                                    </a>
+                                </li>
+
+                            <?php } ?>
+
+                        </ul>
+                    </div>
+
+                    <?php
+                    break;
+                case "tab_categories":?>
+
+                    <div class="listing">
+                        <ul>
+                            <li>
+                                <?php $j=0;foreach($this->getCategories($tab->getContent()) as $category) { ?>
+                                <?php $j++;if ($j>8) :?>
+                            </li><li>
+                                <?php $j=0;?>
+                                <?php endif;?>
+                                  <p><a href="<?php echo $category->getUrlPath();?>"><?php echo $category->getName();?></a></p>
+                                <?php }?>
+                            </li>
+                        </ul>
+                    </div>
+
+
+                    <?php
+                    break;
+            }
+            ?>
+        </div>
+
+
+
+
+        <?php }?>
+
+    </div>
+
+    <?php $i=0;?>
+    <ul class="nav">
+        <?php foreach($tabs as $tab) {?>
+            <li>
+                <a href="<?php $i++;echo $i;?>" data-id="<?php echo $tab->getId();?>">
+                    <?php if($tab->getImage()!="") {?>
+                        <img src="../media/<?php echo $tab->getImage();?>" width="19" height="18" alt="">
+                    <?php }?>
+                    <?php echo $tab->getTitle();?>
+                </a>
+            </li>
+        <?php }?>
+    </ul>
+
+</div>
+
+
+<script>
+    jQuery(function() {
+        //выбираем какой слайд показывать в слайдере на главной странице по дефолту, задается из админки
+        var slideId = '<?php echo $this->getActiveTab();?>';
+        jQuery('.adv-slider .nav li a').filter('[data-id=' + slideId + ']').trigger('click');
+    });
+</script>

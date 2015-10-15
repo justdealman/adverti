@@ -1,0 +1,20 @@
+<form action="<?php echo Mage::getUrl('faqquestions/index') ?>" method="post" class="js-validate-form-faq">
+    <input type="text" name="fio" class="hidden" /><?php //защита от спам ботов?>
+    <input type="text" name="secondName" value="http://" class="hidden" /><?php //защита от спам ботов?>
+    <div class="title-vsm bold">Задать вопрос</div>
+    <div class="d-form-item">
+        <label for="call-back-phone" class="d-form-item__label">Телефон или почта <span class="required-input">*</span></label>
+        <input class="d-form-item__text" type="text" name="communication" id="call-back-phone" required/>
+    </div>
+    <div class="d-form-item">
+        <label for="call-back-contact-person" class="d-form-item__label">Контактное лицо</label>
+        <input class="d-form-item__text" type="text" name="name" id="call-back-contact-person"/>
+    </div>
+    <div class="d-form-item">
+        <label for="call_coment" class="d-form-item__label">Сообщение <span class="required-input">*</span></label>
+        <textarea name="comment" class="d-form-item__text" id="call_coment" required></textarea>
+    </div>
+    <input type="hidden" name="back_url" value="<?php echo $_SERVER['REQUEST_URI'] ?>">
+    <input class="button button_mb-sm button_mr-sm" type="submit" value="Отправить"/>
+    <br class="d-popup__br-1-2-show"/>
+</form>

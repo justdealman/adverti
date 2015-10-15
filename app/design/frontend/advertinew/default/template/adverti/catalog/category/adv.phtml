@@ -1,0 +1,9 @@
+<?php
+$category = Mage::registry('current_category');
+if ($category): ?>
+    <div class="sub-category-info">
+        <?php
+             echo  $category->getData('advertisement');
+         ?>
+    </div>
+<?php endif;?>

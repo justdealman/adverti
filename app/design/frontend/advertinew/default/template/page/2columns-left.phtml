@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <?php echo $this->getChildHtml('head') ?>
+</head>
+<body<?php echo $this->getBodyClass() ? ' class="' . $this->getBodyClass() . '"' : '' ?>  marginwidth=0 marginheight=0
+                                                                                          leftmargin=0 rightmargin=0
+                                                                                          topmargin=0 bgcolor=white
+                                                                                          text=black>
+
+<div id="up"></div>
+<table width="100%" cellspacing=0 cellpadding=0 border=0>
+    <tr>
+        <td>
+            <?php echo $this->getChildHtml("header") ?>
+
+            <div style="clear: both;"><font style="font-size: 11px;">&nbsp;</font></div>
+            <table width="100%" cellspacing=0 cellpadding=0 border=0 class="print_table">
+                <tr valign=top>
+                    <td>
+                        <img src="/skin/frontend/adverti/default/images/i/1x1.gif" width="35px" height="1px">
+                    </td>
+                    <td width=252>
+                        <?php echo $this->getChildHtml('left') ?>
+                    </td>
+                    <td width="100%" align=left>
+                        <table width="100%" cellspacing=0 cellpadding=0 border=0>
+                            <tr>
+                                <td align=right><a href="#" onclick="printcss();" class="printlink">распечатать эту
+                                        страницу</a>
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="rightmarg">
+                            <?php /** @var Mage_Page_Block_Html $this */ ?>
+                            <?php echo $this->getChildHtml('breadcrumbs') ?>
+                        <?php echo $this->getChildHtml('global_messages') ?>
+                            <?php echo $this->getChildHtml('content') ?>
+                            <?php echo $this->getChildHtml('share') ?>
+                    </td>
+                </tr>
+            </table>
+            <div id="removeprint2">
+                <p>&nbsp;</p>
+                <?php echo $this->getChildHtml('promoted_categories') ?>
+                <p>&nbsp;</p>
+                <?php echo $this->getChildHtml('footer') ?>
+                <?php echo $this->getChildHtml('global_cookie_notice') ?>
+                <?php echo $this->getChildHtml('before_body_end') ?>
+                <?php echo $this->getAbsoluteFooter() ?>
+            </div>
+            <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('online_consultant')->toHtml() ?>
+</body>
+</html>

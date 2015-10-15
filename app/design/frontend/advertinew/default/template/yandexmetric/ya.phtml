@@ -1,0 +1,6 @@
+<?php if (!Mage::helper('core/cookie')->isUserNotAllowSaveCookie()): ?>
+<?php $accountId = Mage::getStoreConfig(Ukit_YandexMetric_Helper_Data::XML_PATH_ACCOUNT) ?>
+    <?php echo $this->_getOrdersTrackingCode() ?>
+    <?php echo $accountId;?>
+<?php endif; ?>
+

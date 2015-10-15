@@ -1,0 +1,110 @@
+<?php $iIds = $this->getInflictionIds()?>
+<div id="infliction-block">
+    <?php if($this->getIsShow()){ ?>
+        <div class="js-clone">
+            <div class="product__controls__left print-hide">
+                <div class="select-help-group select-help-group_print">
+
+                    <div class="select-help-group_select">
+                        <label for="select1" class="select-help-group__select__label">Нанесение</label><input name="nan_enable" type="checkbox" class="checkbox__item">
+                        <div class="d-select d-select_w-a d-select_min-w-260 js-d-select">
+
+                            <select name="nanesenie[]" class="nanesenie d-select__inner js-clone-obj">
+                                <option value="">Без нанесения</option>
+                                <?php foreach($this->getInflictions() as $infliction) { ?>
+                                    <option
+                                           value="<?php echo $infliction['entity_id'] ?>"
+                                           id="nan_<?php echo $infliction['entity_id'] ?>"
+                                           <?php echo $iIds[0]==$infliction['entity_id'] ?  'selected="selected"' : ''?>
+                                        >
+                                        <?php echo $infliction['name'] ?>(+<?php echo $infliction['suffix_price'] ?> р.)
+                                    </option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                        <?php if(!is_null($this->getIdRecomend())){?>
+                            <div class="vsmall-size lh-sm print-hide">Мы рекомендуем <a href="javascript:void(0);" nan_id="<?php echo $this->getIdRecomend() ?>" class="dotted js_cheked_nan"><?php echo(Mage::getModel('additionalServices/additionalService')->load($this->getIdRecomend())->getName())?></a></div>
+                        <?php } ?>
+                    </div>
+
+                    <div class="select-help-group__help">
+                        <div class="button-helper js-button-helper-with-scroll js-button-helper-with-scroll-infliction print-hide">
+                            <a href="javascript:void(0);" class="button-helper__button"><span class="button-helper__button__inner"></span></a>
+                            <div class="button-helper__text button-helper__text_for-scroll vsmall-size lh-sm">
+                                <div class="button-helper__text__inner">
+                                    <?php foreach($this->getInflictions() as $infliction ) { ?>
+                                        <?php if($infliction['description']!=''){?>
+                                            <?php echo $infliction['description'] ?><br/><br/>
+                                        <?php } ?>
+                                    <?php } ?>
+                                </div>
+                                <a href="<?php echo Mage::getBaseUrl() ?>drawing-logo.html" class="dotted" >Подробнее о нанесении</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div id="clone_box" class="d-select d-select_w-a d-select_min-w-260">
+            <?php unset($iIds[0]);?>
+            <?php foreach($iIds as $iI):?>
+                <div class="box-infliction">
+                    <select name="nanesenie[]" class="nanesenie d-select__inner js-clone-obj">
+                        <option value="">Без нанесения</option>
+                        <?php foreach($this->getInflictions() as $infliction) { ?>
+                            <option
+                                value="<?php echo $infliction['entity_id'] ?>"
+                                id="nan_<?php echo $infliction['entity_id'] ?>"
+                                <?php echo $iI==$infliction['entity_id'] ?  'selected="selected"' : ''?>
+                                >
+                                <?php echo $infliction['name'] ?>(+<?php echo $infliction['suffix_price'] ?> р.)
+                            </option>
+                        <?php } ?>
+                    </select>
+                    <span class="delete-infliction delete-infliction-fix">-</span>
+                </div>
+            <?php endforeach;?>
+        </div>
+        <div id="clone-infliction" class="clone-infliction">+ добавить нанесение</div>
+        <script>
+            (function ($) {
+
+                if ( jQuery('body').hasClass('is-touch-device') ) {
+
+                    jQuery('.d-select__inner').easyDropDown();
+                    jQuery('.d-select__inner').each(function() {
+                        jQuery(this).prop('disabled') ?
+                            jQuery(this).closest('.dropdown').addClass('disabled')
+                            :jQuery(this).closest('.dropdown').removeClass('disabled');
+                    });
+                } else {
+                    jQuery('.d-select__inner').chosen({
+                        width: '100%',
+                        disable_search: true
+                    });
+                }
+
+                jQuery("input[name$='max_amoun_infliction']").val( <?php if ($this->getMaxAmountInfliction()) echo $this->getMaxAmountInfliction();else echo 0;?>);
+
+                check_amount_infliction();
+
+                function check_amount_infliction(){
+                    var max_amoun_infliction= jQuery("input[name$='max_amoun_infliction']").val();
+                    var button=jQuery('#clone-infliction');
+                    var current_amoun_infliction=jQuery('.box-infliction').length+2;
+                    if(current_amoun_infliction>max_amoun_infliction) {
+                        button.hide();
+                    }else{
+                        button.show();
+                    }
+                }
+
+                jQuery('.js-button-helper-with-scroll-infliction').buttonHelper();
+
+            })(jQuery);
+        </script>
+
+    <?php }?>
+</div>

@@ -1,0 +1,19 @@
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/"
+                       xmlns:moz="http:/www.mozilla.org/2006/browser/search/">
+    <ShortName>Поиск сувениров</ShortName>
+    <Description>http://www.adverti.ru</Description>
+    <InputEncoding>UTF-8</InputEncoding>
+    <Image width="26" height="16" type="image/png">
+        data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB0AAAAYCAYAAAAGXva8AAAACXBIWXMAAAsTAAALEwEAmpwYAAABNmlDQ1BQaG90b3Nob3AgSUNDIHByb2ZpbGUAAHjarY6xSsNQFEDPi6LiUCsEcXB4kygotupgxqQtRRCs1SHJ1qShSmkSXl7VfoSjWwcXd7/AyVFwUPwC/0Bx6uAQIYODCJ7p3MPlcsGo2HWnYZRhEGvVbjrS9Xw5+8QMUwDQCbPUbrUOAOIkjvjB5ysC4HnTrjsN/sZ8mCoNTIDtbpSFICpA/0KnGsQYMIN+qkHcAaY6addAPAClXu4vQCnI/Q0oKdfzQXwAZs/1fDDmADPIfQUwdXSpAWpJOlJnvVMtq5ZlSbubBJE8HmU6GmRyPw4TlSaqo6MukP8HwGK+2G46cq1qWXvr/DOu58vc3o8QgFh6LFpBOFTn3yqMnd/n4sZ4GQ5vYXpStN0ruNmAheuirVahvAX34y/Axk/96FpPYgAAACBjSFJNAAB6JQAAgIMAAPn/AACA6AAAUggAARVYAAA6lwAAF2/XWh+QAAADAElEQVR42rTWW4hWVRQH8N83jqNO4yimlpMVTpbiy3SBHhy7UIRKFxmCiiKDiuhFH1IrepPoQlJ0I8qXoht0ISK60gWEIQmiohDMmRoYRjRNdCZwhhqxl/8Xh8P5vhnBFmy+ffZZZ//X2vu//uurHdmy1DTsHjyJNhzHbnyGLzDsFK1lmn63YiE6cTb6sDPgO7Dk/wD9Ib+TeA1f4R90YSv6cfvpBn0aQ5iB2cm0F2/nfTfeil/bVJvVKu50XjZZhnOxKIDrcXN81uPzzK/HC/GHd3EXJhqBthbmc7AtWVw8RbDjhfkn+AVv4grckhO8DSeqPp7x0OrO+vwlbAlR4DeM4I/cXw378SzeKO0zivdxEVZltOHrZpnOxU2Z/xq2jhQiPQPtGEsQVfYX7k7QvXgwBHyvEZHGsSvzLmxMdscy9mOgCWDdxsLi4ez9HM5rBDqJ+/AKOvBA2DjLqdswNuFk6vexZiUzivvxcp5vwMompdaLDWF42T6KeEjmV1eBtuJefJhykPscr9hwZgSiP/7fYW3edYT58xP88WA8ku/+A1sRRq4rbPw7Hs89lu1G3Fl4XhJd/hKXpH6PYbAAdB1W13nTGu1ch4N4FR/ng0MNjnZFxdrKCMrhqFZXRtE2F0EvyOJg1GRPmNvIvq1Ym43Xcx2NyHdt6nhfSy4d1qSuRvBEarfKdkVEfsT30du+1PI1TYKdV7/CFmyPZNU7yWI8nM0aNYRnwsir8GgktH0a5dSHxS0R5ndwGa7Ep3G4I2xsJgRz8VO6zfLS+8E0iOdTs3A5esqZDOCszEfw9xSRHykEWbbd+CCgk1lrx9oi6Dn4JhkfikJNTAE6mXocrXi3AU/hxWKNoqcu+LU4rMLeiP9AyLEMF+L8lMGC3PvMCEh3SFK2zrTKsi2sgy5PM4Y/Q+8duDTH3eb02eHWwjGdKJTOmpLjBI6mfY3hQH5rBZ+TId7SZLkAZ1aQb2cddCj9b3sYeRA/p4yGMg5EccankU1HGkE3ejKO5t9F/78DAFMLrtzONiVpAAAAAElFTkSuQmCC
+    </Image>
+    <Url type="text/html" method="get" template="http://www.adverti.ru/catalogsearch/result">
+        <Param name="q" value="{searchTerms}"/>
+    </Url>
+    <Url type="application/opensearchdescription+xml"
+         rel="self"
+         template="https://support.mozilla.org/ru/search/xml"/>
+    <Url type="application/x-suggestions+json"
+         template="http://www.adverti.ru/catalogsearch/result/?q={searchTerms}"/>
+    <moz:SearchForm>http://www.adverti.ru/</moz:SearchForm>
+</OpenSearchDescription>
+

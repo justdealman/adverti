@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <?php
+    /** @var Mage_Page_Block_Html $this */
+    $test = print_r($this->getChildHtml('head'),true);
+    echo($test);
+    ?>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="robots" content=" meta name="noyaca"/>
+    <script>
+        jQuery(function () {
+            jQuery('.js-nav-n').projectMenu();
+        });
+    </script>
+
+    <script>
+        jQuery(function() {
+            var selects = jQuery('.js-d-select').find('.d-select__inner');
+
+            if ( jQuery('body').hasClass('is-touch-device') ) {
+                selects.easyDropDown();
+            } else {
+                selects.chosen({
+                    width: '100%',
+                    disable_search: true
+                });
+                jQuery('.chosen-container .chosen-results').on('touchend', function(event) {
+                    event.stopPropagation();
+                    event.preventDefault();
+                });
+            }
+        });
+    </script>
+
+    <script>
+        jQuery(function() {
+            jQuery('.js-button-helper-with-scroll').buttonHelper();
+        });
+    </script>
+</head>
+<body class="js-container">
+<div class="main-wrapper">
+        <?php echo $this->getChildHtml('after_body_start') ?>
+        <?php echo $this->getChildHtml('header') ?>
+        <?php echo $this->getChildHtml('topMenu') ?>
+        <?php echo $this->getChildHtml('global_messages') ?>
+            <?php if($this->getRequest()->getOriginalPathInfo()!='/'){ ?>
+            <?php echo $this->getChildHtml('breadcrumbs') ?>
+            <?php } ?>
+            <div class="content container">
+            <?php echo $this->getChildHtml('content') ?>
+            <?php echo $this->getChildHtml('share') ?>
+            <div class="footer-push"></div>
+        </div>
+
+    </div>
+<footer class="footer">
+    <?php echo $this->getChildHtml('footer') ?>
+    <?php echo $this->getChildHtml('global_cookie_notice') ?>
+    <?php echo $this->getChildHtml('before_body_end') ?>
+    <?php echo $this->getAbsoluteFooter() ?>
+   </footer>
+<script>
+    (function($) {
+        $(function() {
+            var subscribeForm = $('.js-subscribe');
+            var subscribeCloser = subscribeForm.find('.subscribe__closer');
+            subscribeCloser.on('click', function( event ) {
+                event.preventDefault();
+                subscribeForm.addClass('subscribe_hidden');
+                Mage.Cookies.set('showSubscribe', 'off');
+            });
+            subscribeForm.validate({
+                rules: {
+                    'email': {
+                        'required': true
+                      , 'email': true
+                    }
+                }
+              , messages: {
+                    'email': {
+                        'required': ''
+                      , 'email': ''
+                    }
+                }
+//              , onkeyup: false
+            });
+            subscribeForm.on('submit',function(){
+                yaCounter<?php echo Mage::getStoreConfig('yandex/metric/code')?>.reachGoal("Podpiska");
+                ga('send','event','Zakaz','Podpiska','<?php echo $this->helper('core/url')->getCurrentUrl() ?>');
+            })
+        });
+    })(jQuery);
+</script>
+
+<?php // popap dlja zakaz zvonka ?>
+<div class="d-popup js-add-call js-show-bg js-close-bg-click">
+    <a href="#" class="x-closer x-closer_corner js-x-closer-add-call"></a>
+    <form action="<?php echo Mage::getUrl('adverti/order/sendcall')?>" method="post" class="js-validate-form-recall">
+        <input type="text" name="fio" class="hidden" /><?php //защита от спам ботов?>
+        <input type="text" name="secondName" value="http://" class="hidden" /><?php //защита от спам ботов?>
+        <div class="title-vsm bold">Заказать звонок</div>
+        <div class="d-form-item">
+            <label for="call-back-phone" class="d-form-item__label">Телефон <span class="required-input">*</span></label>
+            <input class="d-form-item__text" type="text" name="telephone" id="call-back-phone" required />
+        </div>
+        <div class="d-form-item">
+            <label for="call-back-contact-person" class="d-form-item__label">Контактное лицо</label>
+            <input class="d-form-item__text" type="text" name="contact" id="call-back-contact-person" />
+        </div>
+        <div class="d-form-item">
+            <label for="call_coment" class="d-form-item__label">Сообщение</label>
+            <textarea name="comment" class="d-form-item__text" id="call_coment"></textarea>
+            </div>
+        <input type="hidden" name="back_url" value="<?php echo $_SERVER['REQUEST_URI']?>">
+        <input class="button button_mb-sm button_mr-sm" type="submit" value="Заказать звонок" />
+        <br class="d-popup__br-1-2-show" />
+<!--        <a href="#" class="dotted js-add-call-closer">Отказаться от заказа</a>-->
+    </form>
+</div>
+<div class="d-popup js-add-min-count js-show-bg">
+    <a href="#" class="x-closer x-closer_corner js-x-closer-add-min-count"></a>
+    <form action="<?php echo Mage::getUrl('adverti/order/sendconsult')?>" method="post" class="js-validate-form-min-count">
+        <input type="text" name="fio" class="hidden" /><?php //защита от спам ботов?>
+        <input type="text" name="secondName" value="http://" class="hidden" /><?php //защита от спам ботов?>
+        <div class="title-vsm bold">Минимальный тираж для автоматического расчета этого товара <span class="js-min-count-set-var"></span> шт</div>
+        <div class="title-vsm">Для индивидуального расчета вашего тиража, укажите, пожалуйста, вашу контактную информацию.
+            Наши менеджеры свяжутся с вами после уточнения технологической возможности изготовления такой партии продукции</div>
+        <div class="d-form-item">
+            <label for="consult-communication" class="d-form-item__label">Телефон или электропочта <span class="required-input">*</span></label>
+            <input class="d-form-item__text" type="text" name="communication" id="min-count-communication" required />
+        </div>
+        <div class="d-form-item">
+            <label for="consult-contact-person" class="d-form-item__label">Контактное лицо</label>
+            <input class="d-form-item__text" type="text" name="contact" id="min-count-contact-persono" />
+        </div>
+        <div class="d-form-item">
+            <label for="consult_coment" class="d-form-item__label">Сообщение</label>
+            <textarea name="comment" class="d-form-item__text" id="min-count_coment"></textarea>
+        </div>
+        <input type="hidden" name="back_url" value="<?php echo $_SERVER['REQUEST_URI']?>">
+        <input class="button button_mb-sm button_mr-sm" type="submit" value="Отправить вопрос" />
+        <br class="d-popup__br-1-2-show" />
+        <!--<a href="#" class="dotted js-add-consult-closer">Отказаться от заказа</a>-->
+    </form>
+</div>
+<?php // popap dlja zakaz zvonka ?>
+<div class="d-popup js-add-consult js-show-bg">
+    <a href="#" class="x-closer x-closer_corner js-x-closer-add-consult"></a>
+    <form action="<?php echo Mage::getUrl('adverti/order/sendconsult')?>" method="post" class="js-validate-form-consult">
+        <input type="text" name="fio" class="hidden" /><?php //защита от спам ботов?>
+        <input type="text" name="secondName" value="http://" class="hidden" /><?php //защита от спам ботов?>
+        <div class="title-vsm bold">Задать вопрос о товаре</div>
+        <div class="d-form-item">
+            <label for="consult-communication" class="d-form-item__label">Телефон или электропочта <span class="required-input">*</span></label>
+            <input class="d-form-item__text" type="text" name="communication" id="consult-communication" required />
+        </div>
+        <div class="d-form-item">
+            <label for="consult-contact-person" class="d-form-item__label">Контактное лицо</label>
+            <input class="d-form-item__text" type="text" name="contact" id="consult-contact-persono" />
+        </div>
+        <div class="d-form-item">
+            <label for="consult_coment" class="d-form-item__label">Сообщение</label>
+            <textarea name="comment" class="d-form-item__text" id="consult_coment"></textarea>
+        </div>
+        <input type="hidden" name="back_url" value="<?php echo $_SERVER['REQUEST_URI']?>">
+        <input class="button button_mb-sm button_mr-sm" type="submit" value="Отправить вопрос" />
+        <br class="d-popup__br-1-2-show" />
+        <!--<a href="#" class="dotted js-add-consult-closer">Отказаться от заказа</a>-->
+    </form>
+</div>
+<?php // popap dlja oformlenie zvonka ?>
+<div class="d-popup js-order-popup js-show-bg">
+    <a href="#" class="x-closer x-closer_corner js-x-closer-cart-popup"></a>
+    <form action="<?php echo Mage::getUrl('calculate/calculate/saveorder') ?>" method="post" class="js-validate-form-set-order">
+        <input type="text" name="fio" class="hidden" /><?php //защита от спам ботов?>
+        <input type="text" name="secondName" value="http://" class="hidden" /><?php //защита от спам ботов?>
+        <div class="title-vsm bold">Оформить заказ</div>
+        <div class="d-form-item">
+            <label for="order-phone" class="d-form-item__label">Телефон <span class="required-input">*</span></label>
+            <input class="d-form-item__text" type="text" name="telephone" id="order-phone" required />
+        </div>
+        <div class="d-form-item">
+            <label for="order-email" class="d-form-item__label">E-mail</label>
+            <input class="d-form-item__text" type="email" name="email" id="order-email" />
+        </div>
+        <div class="d-form-item">
+            <label for="order-contact-person" class="d-form-item__label">Контактное лицо</label>
+            <input class="d-form-item__text" type="text" name="contact" id="order-contact-person" />
+        </div>
+
+        <input class="button button_mb-sm button_mr-sm" type="submit" value="Оформить заказ" onclick=" yaCounter<?php echo Mage::getStoreConfig('yandex/metric/code')?>.reachGoal('Oformlenie');ga('send', 'pageview', '/virtual/oformlenie');" />
+        <br class="d-popup__br-1-2-show" />
+        <a href="#" class="dotted js-cart-popup-closer">Вернуться в корзину</a>
+    </form>
+</div>
+
+<?php // popap preduprezhdenie ?>
+<div class="d-popup js-add-to-cart-popup-alert js-show-bg">
+    <a href="#" class="x-closer x-closer_corner js-x-closer-order-popup-alert"></a>
+    <form action="" method="post" class="js-validate-form-set-order">
+        <div class="title-vsm bold">Этот товар уже добавлен в вашу карзину</div>
+        <div class="d-form-item">
+            Данный товар уже добавлен в вашу карзину, при продолжение заказа ранее добавленый товар будет удален из корзины.
+        </div>
+        <div class="d-form-item">
+            <br class="d-popup__br-1-2-show" />
+            <a href="#" class="dotted js-add-to-cart-alert">Добавить в корзину</a>
+            <a href="#" class="dotted js-add-to-cart-alert-close">Отмена</a>
+        </div>
+    </form>
+</div>
+
+<?php // popap dlja podpischicov ?>
+<div class="d-popup js_subscribe_popup js-show-bg js-close-bg-click">
+    <a href="javascript:void(0)" class="x-closer x-closer_corner js-x-closer-subscribe"></a>
+    <form action="http://cp.unisender.com/ru/subscribe?hash=5t6hdww5ancb8e7ddusan1gme7cpeqzsgfrt91jy" method="post" class="js-subscribe-form js-validate-form-subscribe">
+        <div class="title-vsm bold">Подписаться на рассылку. Мы рассылаем скидки. Раз в месяц. Каждый месяц.</div>
+        <div class="d-form-item">
+            <label for="subscribe_mail" class="d-form-item__label">E-mail <span class="required-input">*</span></label>
+            <input class="d-form-item__text" type="email" name="email" id="subscribe_mail" required />
+        </div>
+        <input class="button button_mb-sm button_mr-sm" type="submit" value="Оформить подписку" onclick="jQuery('.js-subscribe-form').submit();"/>
+    </form>
+</div>
+<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('online_consultant')->toHtml() ?>
+</body>
+</html>
+
+<?php //popap dlja predprosmotra smotri v ../adverti/catalog/category/popup.phtml ?>

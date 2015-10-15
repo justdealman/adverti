@@ -1,0 +1,48 @@
+<?php
+/*/* @var $this Mage_Core_Block_Template */
+/* @var $catalogSearchHelper Mage_Catalogsearch_Helper_Data
+$catalogSearchHelper = $this->helper('catalogsearch');
+*/?><!--
+<form id="search_mini_form" action="<?php /*echo $catalogSearchHelper->getResultUrl() */?>" method="get">
+    <table>
+        <tr>
+            <td>
+                <input id="search" type="text" name="<?php /*echo $catalogSearchHelper->getQueryParamName() */?>"
+                       value="<?php /*echo $catalogSearchHelper->getEscapedQueryText() */?>" class="input-search"
+                       maxlength="<?php /*echo $catalogSearchHelper->getMaxQueryLength(); */?>"/>
+
+                <div id="search_autocomplete" class="search-autocomplete"></div>
+            </td>
+            <td>
+                <input type="submit" class="button-search" value=""/>
+            </td>
+        </tr>
+    </table>
+    <script type="text/javascript">
+        //<![CDATA[
+        var searchForm = new Varien.searchForm('search_mini_form', 'search', '<?php /*echo $this->__('Search entire store here...') */?>');
+        searchForm.initAutocomplete('<?php /*echo $catalogSearchHelper->getSuggestUrl() */?>', 'search_autocomplete');
+        //]]>
+    </script>
+</form>
+-->
+<?php
+$catalogSearchHelper = $this->helper('catalogsearch');
+?>
+<form id="search_mini_form" action="<?php echo $catalogSearchHelper->getResultUrl() ?>" method="get" class="search">
+    <div class="search__inner search__inner_triangle">
+        <button type="submit" class="search__inner__button">
+            <span class="search__inner__button__icon"></span>
+        </button>
+        <input id="search" type="text" name="<?php echo $catalogSearchHelper->getQueryParamName() ?>"
+               value="<?php echo $catalogSearchHelper->getEscapedQueryText() ?>"
+               maxlength="<?php echo $catalogSearchHelper->getMaxQueryLength() ?>"
+               class="search__inner__text" placeholder="Поиск по каталогу товаров"/>
+    </div>
+    <script type="text/javascript">
+        //<![CDATA[
+        var searchForm = new Varien.searchForm('search_mini_form', 'search', '<?php echo $this->__('Search entire store here...') ?>');
+        searchForm.initAutocomplete('<?php echo $catalogSearchHelper->getSuggestUrl() ?>', 'search_autocomplete');
+        //]]>
+    </script>
+</form>

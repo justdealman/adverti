@@ -1,0 +1,29 @@
+<?php
+/** @var Adverti_Calculate_Block_ProductAttributes $this */
+?>
+
+<div id="attributes" class="specifications vsmall-size lh-sm js-text-desc">
+    <?php foreach ($this->getProductParameters() as $key => $attribute): ?>
+        <div class="specifications__item">
+            <?php if ($attribute['type'] == "multiselect"): ?>
+                <label class="gray">
+                    <?php echo $attribute['label'] ?>:
+                    <div class="d-select d-select_w-a d-select_min-w-260 print-inline-block js-d-select">
+                        <select name="haracteristik_variants[]" class="d-select__inner">
+                            <?php foreach (explode(',', $attribute['value']) as $productMultiAttribute): ?>
+                                <?php $value = $attribute['label'] . ': ' . trim($productMultiAttribute); ?>
+                                <option value="<?php echo $value; ?>" <?php
+                                if (in_array($value, $this->getMultiAttributes())):?>selected<?php endif;?>>
+                                    <?php echo $productMultiAttribute ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </label>
+            <?php else: ?>
+                <span class="gray"><?php echo $attribute['label'] ?>:</span>
+                <?php echo $attribute['value'] ?>
+            <?php endif; ?>
+        </div>
+    <?php endforeach; ?>
+</div>

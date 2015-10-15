@@ -1,0 +1,99 @@
+<?php
+/**
+ * Product list template
+ *
+ * @see Mage_Catalog_Block_Product_List
+ */
+?>
+<?php
+/** @var Mage_Catalog_Block_Product_List $this */
+$_productCollection = $this->getLoadedProductCollection();
+
+$currentCategory = Mage::registry('current_category');
+$checkForGroupLabel = ($currentCategory->getLevel() == 2 && !$this->getRequest()->getParam('cat')) ? false : true;
+
+if ($checkForGroupLabel) {
+    $_subCats = $currentCategory->getChildren();
+    $subCats = explode(',', $_subCats);
+    $i = 0;
+    foreach ($subCats as $subCatId) {
+        $_category = Mage::getModel('catalog/category')->load($subCatId);
+        $mas = $_category->getChildren();
+        if ($mas != '') {
+            //unset($subCats[$i]);
+            $subCats = array_merge($subCats, explode(',', $mas));
+        }
+        $i++;
+    }
+
+    $currentCategoryLabel = '';
+}
+?>
+
+<div class="lets-filter-layout">
+    <div class="lets-filter-col1 js-lets-filter-col1">
+        <?php echo $this->getChildHtml('catalog.letsfilter') ?>
+    </div>
+    <div class="lets-filter-col2">
+        <?php echo $this->getChildHtml('product_list_toolbar') ?>
+            <div class="cols-4">
+                <?php foreach ($_productCollection as $product){ ?>
+                    <?php
+                        if ($checkForGroupLabel) {
+                            $productCategoryIds = $product->getCategoryIds();
+                            foreach ($productCategoryIds as $categoryId) {
+                                if (!in_array($categoryId, $subCats)) {
+                                    continue;
+                                }
+                                $categoryLabel = Mage::getModel('catalog/category')->load($categoryId)->getName();
+                                //echo ''.$categoryLabel.'|';
+                                if ($categoryLabel != $currentCategoryLabel) {
+                                    $currentCategoryLabel = $categoryLabel;
+                                    echo '</div>';
+                                    echo '<h3>' . $currentCategoryLabel . '</h3>';
+                                    echo '<div class="cols-4">';
+                                }
+                            }
+                        }
+                            Mage::helper('calculate')->discountedAndCustomRate($product);
+                    ?>
+                    <div class="cols-4__item">
+                        <a href="<?php echo $product->getProductUrl() ?>" data-edition="<?php echo $product->getData('select_edition');?>" class="js-set-edition promo-product promo-product_adaptive-slider promo-product_full-w">
+
+                            <?php if($product->getData('recommended_price_old')) {?><div class="discount-flag">скидка</div><?php }?>
+                            <?php if($product->getData('archive')) {?><div class="archive-flag">Архивный товар</div><?php }?>
+
+                            <div class="promo-product__image-w">
+                                <img class="promo-product__image" src="<?php
+                                echo $this->helper('catalog/image')->init($product, 'small_image')->resize(210)->setQuality(100); ?>" alt="<?php
+                                echo $this->stripTags($this->getImageLabel($product, 'small_image'), null, true) ?>"
+                                     alt=""/>
+                            </div>
+                            <div class="promo-product__title-w promo-product__title-w_hidden-1-col">
+                                <div class="promo-product__title"><?php echo $this->escapeHtml($product->getName()) ?></div>
+                            </div>
+                            <div class="promo-product__price">
+                                <div class="promo-product__price__price">
+                                    <?php if($product->getData('recommended_price_old')) {?>
+                                        <span class="catalog_oldprice"><?php echo number_format($product->getData('recommended_price_old'), 2, ',', ' ');?></span>
+                                    <?php }?>
+                                    <?php echo number_format($product->getData('recommended_price'), 2, ',', ' ');?>&nbsp;руб.
+                                </div>
+                            </div>
+                            <div class="promo-product__additional"><?php echo Mage::helper('calculate')->getCountText($product->getData('recommended_count'));?></div>
+                            <div class="promo-product__sku"><?php echo $product->getSku() ?></div>
+                        </a>
+                    </div>
+                <?php } ?>
+            </div>
+        <?php echo $this->getChildHtml('product_list_toolbar') ?>
+    </div>
+    <div class="lets-filter-clear"></div>
+</div>
+<script>
+    jQuery('.js-set-edition').on('click', function(e){
+        e.preventDefault();
+        Mage.Cookies.set('select_edition', jQuery(this).attr('data-edition'));
+        location.href = jQuery(this).attr('href');
+    })
+</script>
