@@ -3,7 +3,28 @@
 <div id="calculation-details">
     <div class="roll-up roll-up_mb-r js-roll-up js-roll-up-show-link" data-rollup-id="full-info">
 
-        <div class="sum-line sum-line-with-bg">
+        <div class="sum-line">
+            <div class="sum-line__left">
+                <span class="sum-line__inner">
+                    Всего
+                    <?php if($oldCalculation){?><span class="calculate_oldprice"> <?php echo number_format($oldCalculation['total']['amount'], 2, ',', ' '); ?>&nbsp;руб.</span><?php }?>
+                    <span class="js-amount-price"><?php echo number_format($this->getTotalAmount(), 2, ',', ' '); ?></span>&nbsp;руб.
+                    за <span class="bold"><?php echo $this->getCount(); ?>&nbsp;шт.</span>
+                    <?php if($oldCalculation){?> со скидкой <?php echo number_format($oldCalculation['percent'], 2, ',', ' ');?>%
+                        <?php if(!$oldCalculation['service_is_enable']){?> на изделие<?php }?>
+                    <?php }?>
+                </span>
+                <span class="sum-line__discount">С учетом скидки 5 678 руб.</span>
+            </div>
+            <div class="sum-line__right">
+                <input class="button print-hide js-add-to-cart-popup" id="in_basket" type="submit" name="test"
+                       value="В корзину" onclick="ga('send', 'pageview', '/virtual/add_to_basket');yaCounter<?php echo Mage::getStoreConfig('yandex/metric/code')?>.reachGoal('AddBasket');"/>
+            </div>
+        </div>
+
+        <p class="add_basket_tip">Добавление в корзину не налагает обязательств о покупке. Менеджер свяжится с Вами после оформления запроса.</p>
+
+        <?php /*<div class="sum-line sum-line-with-bg">
             <div class="sum-line__left">
                 <span class="sum-line__inner">
                     Всего за тираж из <span class="bold"><?php echo $this->getCount(); ?>&nbsp;шт.</span>
@@ -96,7 +117,7 @@
                 <input class="button print-hide js-add-to-cart-popup" id="in_basket" type="submit" name="test"
                        value="В корзину" onclick="ga('send', 'pageview', '/virtual/add_to_basket');yaCounter<?php echo Mage::getStoreConfig('yandex/metric/code')?>.reachGoal('AddBasket');"/>
             </div>
-        </div>
+        </div>*/?>
 
 
     </div>

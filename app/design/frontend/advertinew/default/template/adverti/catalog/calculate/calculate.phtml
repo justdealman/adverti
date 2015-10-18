@@ -11,6 +11,17 @@ $productView = new Mage_Catalog_Block_Product_View();
     <?php echo $this->getChildHtml('productAttributes'); ?>
     <div class="product__controls">
 
+        <?php if (!$product->getData('archive')){?>
+            <?php echo $this->getChildHtml('calculationParams'); ?>
+        <?php }else { ?>
+            <div class="title-vsm bold">Архивный товар</div>
+            <script>
+                jQuery(document).ready(function(){
+                    setTimeout(function(){ jQuery('.bx-wrapper-w').prepend('<div class="archive-flag">Архивный товар</div>')},1000);
+                });
+            </script>
+        <?php }?>
+
         <div class="product__controls__wrapper">
             <?php //замутить в зависимости выбраных артов ?>
             <?php if ($product->isSaleable() && ($product->getTypeId() == 'configurable')): ?>
@@ -139,45 +150,52 @@ $productView = new Mage_Catalog_Block_Product_View();
       <?php } ?>
                 </div>
             </div>
+
+
         <?php if (!$product->getData('archive')){?>
-                             <?php echo $this->getChildHtml('calculationParams'); ?>
-         <?php }else { ?>
-             <div class="title-vsm bold">Архивный товар</div>
-             <script>
-                 jQuery(document).ready(function(){
-                     setTimeout(function(){ jQuery('.bx-wrapper-w').prepend('<div class="archive-flag">Архивный товар</div>')},1000);
-                 });
-             </script>
-         <?php }?>
+
+        <?php echo $this->getChildHtml('calculationDetails'); ?>
+
+        <?php /*<hr class="hr hr_m-r print-hide" />
+        <div class="sum-line sum-line-with-bg">
+            <div class="sum-line__left">
+                        <span class="sum-line__inner">
+                            Условия поставки</span>
+                </span>
+            </div>
+        </div>
+        <div class="roll-up__content roll-up__content_border-gray print-show-n block">
+            <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('terms_of_delivery')->toHtml() ?>
+        </div> */?>
+
+        <?php }?>
+
+        <div class="wrapper-right wrapper-right_mb print-hide">
+            <a href="#" class="bbottom-r js-add-consult-button">
+                <span class="icon icon_envelope"></span>
+                <span class="link-inner">Задать вопрос о товаре</span>
+            </a>
+        </div>
+
+
 </div>
 </div>
 <?php //блок с доролнительной инфой ?>
 <div class="clearfix"></div>
-<div class="wrapper-right wrapper-right_mb print-hide">
-    <a href="#" class="bbottom-r js-add-consult-button">
-        <span class="icon icon_envelope"></span>
-        <span class="link-inner">Задать вопрос о товаре</span>
-    </a>
+
+<?php/* TODO описание товара переехало */?>
+<div class="title-vsm bold">Описание</div>
+<div class="product_description_more">
+    <p>Брелок-фонарик-трансформер с тремя режимами подсветки: светодиодный фонарик, ультрафиолетовый фонарик, фонарик с мигающей разноцветной подсветкой (7 цветов). В сложенном виде - компактный брелок, который легко прикрепить к ключам. Незаменимая вещь для любого человека: согласитесь, носить отдельно фонарик большинству неудобно, а вот надобность в нем возникает очень часто, и тогда приходится прибегать к помощи мобильного телефона, что тоже не всегда удобно (тем более что многие нынешние модели лишены функции фонарика в принципе). А уж три фонарика сразу носить - светодиодный, ультрафиолетовый и разноцветный - придет в голову единицам, да и те, скорее всего, от этой идеи откажутся ввиду громоздкости. А вот в нашем брелке все сочетается очень компактно.</p>
+    <span class="drop-more"><em>Условия поставки</em></span>
+    <div class="drop-cont">
+        <p>Список условий тут</p>
+    </div>
 </div>
-
-    <?php if (!$product->getData('archive')){?>
-
-            <?php echo $this->getChildHtml('calculationDetails'); ?>
-
-            <hr class="hr hr_m-r print-hide" />
-
-            <div class="sum-line sum-line-with-bg">
-                <div class="sum-line__left">
-                        <span class="sum-line__inner">
-                            Условия поставки</span>
-                        </span>
-                </div>
-            </div>
-            <div class="roll-up__content roll-up__content_border-gray print-show-n block">
-                <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('terms_of_delivery')->toHtml() ?>
-            </div>
-
-    <?php }?>
+<p class="product_card_print"><span><a href="#">Распечатать эту страницу</a></span></p>
+<?php /* Вывод описания<div id="product-description" class="product__description vsmall-size lh-sm" itemprop="description">
+    <?php echo strip_tags(!$product->getData('description'), '<p><a><br>'); ?>
+</div>*/?>
 
 </form>
 

@@ -21,6 +21,7 @@ $_product = $this->getProduct();
     </div>
     <div class="box-2-3__right box-2-3__right_ml400 box-2-3__right_ml400_print-325 box-2-3__right_5-ml-570">
     <?php if(!$_product->getData('enable_old') or $_product->getData('enable_old') == 0){?>
+
         <?php if($_product->getData('description')){ ?>
         <h2>Описание:</h2>
         <?php echo strip_tags($_product->getData('description'),'<p><a><br>'); ?>
@@ -77,10 +78,10 @@ $_product = $this->getProduct();
      <?php echo($this->getChildHtml('sub_categories_for_product'))?>
 
 
-     <div class="title-vsm bold">Описание</div>
+     <?php/*<div class="title-vsm bold">Описание</div>
         <div id="product-description" class="product__description vsmall-size lh-sm" itemprop="description">
             <?php echo strip_tags($_product->getData('description'), '<p><a><br>'); ?>
-        </div>
+        </div>*/?>
 
         <?php if($_product->getData('stock_item')->getData('manage_stock')=='1') { ?>
             <div class="product__circulation">Весь тираж из <span class="bold"><?php echo $_product->getData('stock_item')->getData('qty') ?></span></div>

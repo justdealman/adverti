@@ -3,6 +3,7 @@
 ?>
 <?php if(count($colection)>1):?>
 	<div class="sub-categories-for-product-sorted">
+        <span class="title-other">Другие товары в категориях</span>
 		<div>
             <?php foreach($colection as $category):?>
                 <p><a href="<?php echo $category['url_path']?>"><span><?php echo $category['name']?></span></a></p>
