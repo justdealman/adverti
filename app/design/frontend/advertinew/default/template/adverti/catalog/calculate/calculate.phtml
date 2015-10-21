@@ -435,9 +435,14 @@ $productView = new Mage_Catalog_Block_Product_View();
                     url: '<?php echo $this->getUrl('prodgal/prodgall/getGallery')."?id_product="?>' + id_product + '&id_product_child=' + id_product_child,
                     dataType: "json",
                     success: function (data) {
+                        var t;
+                        if ( $('.ajax_load_image_block .sub-categories-for-product-sorted').length > 0 ) {
+                            t = $('.ajax_load_image_block .sub-categories-for-product-sorted');
+                        }
                         $('.ajax_load_image_block').empty();
                         $('.ajax_load_image_block').html(data.html);
                         window.initGelleryGlobal();
+                        t.appendTo('.ajax_load_image_block > div');
                     }
                 });
             }
